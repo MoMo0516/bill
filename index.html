@@ -139,10 +139,10 @@
   .sayrow{display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
   .sayrow:first-child{border-top:0}
   .sayrow .t{flex:1;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;word-break:break-word}
-  .sayrow .c{flex:none;padding:7px 13px;font-size:12.5px;font-weight:700;
-             background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-  .sayrow .c.done{background:var(--ok);border-color:var(--ok);color:#fff}
-  .sayrow .c.fail{background:transparent;border-color:var(--bad);color:var(--bad)}
+  .sayrow{align-items:flex-start}
+  .sayrow .no{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+              background:var(--accent);color:var(--accent-ink);font-size:12.5px;font-weight:700;margin-top:1px}
+  .sayrow .t{font-size:14px;line-height:1.6}
 
   .foot{max-width:1220px;margin:0 auto;padding:0 20px 40px;font-size:12px;color:var(--muted);text-align:center}
   @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -170,7 +170,7 @@
   <aside class="side">
     <section class="card">
       <h2>선택한 죄목 <span class="n" id="pickCount">0개</span></h2>
-      <div id="picks"><div class="empty">왼쪽에서 죄목을 눌러 담으세요</div></div>
+      <div id="picks"><div class="empty">죄목을 선택하세요 (최대 4개)</div></div>
       <div class="note" id="note"></div>
       <div class="warn" id="warn"></div>
     </section>
@@ -179,11 +179,11 @@
       <h2>보석금</h2>
       <div class="calcbody">
         <div class="seg">
-          <button id="bailY" aria-pressed="false">사용</button>
-          <button id="bailN" aria-pressed="true">미사용</button>
+          <button id="bailY" aria-pressed="true">사용</button>
+          <button id="bailN" aria-pressed="false">미사용</button>
         </div>
         <div class="fld" id="haveWrap">
-          <label for="have">낼 수 있는 금액 (만원)</label>
+          <label for="have">용의자 지불 금액 (만원)</label>
           <input type="number" id="have" value="0" min="0" step="100">
         </div>
       </div>
@@ -194,7 +194,7 @@
     </section>
 
     <section class="card">
-      <h2>구두 고지 문구</h2>
+      <h2>구두 고지 순서</h2>
       <div class="say" id="say"></div>
     </section>
   </aside>
@@ -206,28 +206,29 @@
 var LAWS = [
   { cat:'중대범죄', items:[
     { n:'재물손괴',    f:1000, m:10 },
-    { n:'폭행죄',      f:1000, m:10 },
-    { n:'도주',        f:1500, m:10, d:'PM 정차 명령 · 사유지 3회 이탈 명령 불응' },
-    { n:'성희롱',      f:1500, m:10 },
+    { n:'폭행죄',      f:1500, m:10 },
+    { n:'도주',        f:2000, m:10, d:'PM 정차 명령 · 사유지 3회 이탈 명령 불응' },
+    { n:'성희롱',      f:2000, m:10 },
     { n:'도박개장',    f:1500, m:15, d:'금액 + 룰렛/가위바위보 명시한 건만' },
-    { n:'차량절도',    f:1500, m:15 },
-    { n:'과실치상죄',  f:1500, m:15 },
-    { n:'과실치사죄',  f:3000, m:20 }
+    { n:'차량절도',    f:2000, m:15 },
+    { n:'과실치상죄',  f:2500, m:15 },
+    { n:'과실치사죄',  f:3500, m:20 }
   ]},
   { cat:'특수범죄', items:[
-    { n:'불법무기 소지 및 광고', f:1500, m:15 },
-    { n:'불법무기 판매 및 구매', f:2000, m:15 },
-    { n:'불법장물 소지 및 광고', f:1500, m:15 },
-    { n:'납치 및 유괴',          f:2000, m:20 },
-    { n:'살인',                  f:4000, m:30 }
+    { n:'불법무기 소지 및 광고', f:2000, m:15 },
+    { n:'불법무기 판매 및 구매', f:2500, m:15 },
+    { n:'마약류 소지죄',         f:1500, m:15 },
+    { n:'마약류 판매',           f:2000, m:15 },
+    { n:'납치 및 유괴',          f:2500, m:20 },
+    { n:'살인',                  f:5000, m:30 }
   ]},
   { cat:'공무원 관련법', items:[
     { n:'공무원 명예훼손',        f:1500, m:10 },
-    { n:'공무원 사칭',            f:1500, m:10, d:'경찰이 아님에도 경찰 업무 진행' },
-    { n:'공무집행 방해죄',        f:1500, m:10 },
+    { n:'공무원 사칭',            f:2000, m:10, d:'경찰이 아님에도 경찰 업무 진행' },
+    { n:'공무집행 방해죄',        f:2000, m:10 },
     { n:'공무원 폭행',            f:2000, m:15 },
     { n:'공무원 살인',            f:5000, m:30 },
-    { n:'공무원 뇌물공여 & 수수', f:5000, m:30 }
+    { n:'공무원 뇌물공여 & 수수', f:9000, m:30 }
   ]},
   { cat:'스토리 RP', story:true, items:[
     { n:'ATM RP',       f:3000,  m:10 },
@@ -242,7 +243,7 @@ var LAWS = [
 </script>
 <script>
 var MAXCRIMES = 4, PERMIN = 100, MAXMIN = 120;
-var picked = [], useBail = false;
+var picked = [], useBail = true;
 
 function $(id){ return document.getElementById(id); }
 function el(t, c, x){ var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
@@ -336,7 +337,7 @@ function render(){
   $('pickCount').textContent = picked.length + '개';
 
   if (!picked.length){
-    box.appendChild(el('div', 'empty', '왼쪽에서 죄목을 눌러 담으세요'));
+    box.appendChild(el('div', 'empty', '죄목을 선택하세요 (최대 4개)'));
   } else {
     picked.forEach(function(p){
       var over = use.indexOf(p) < 0;
@@ -398,7 +399,7 @@ function render(){
   } else {
     main.textContent = c.mins || c.add ? ('구금 ' + c.jail + '분') : won(c.fine);
     sub.innerHTML = '';
-    var lines = ['벌금 ' + won(c.fine) + ' 중 ' + won(c.paid) + ' 납부'];
+    var lines = ['벌금 ' + won(c.fine) + ' 중 ' + won(c.paid) + ' 지불'];
     if (c.unpaid > 0) lines.push('미납 ' + won(c.unpaid) + ' ÷ ' + PERMIN + '만원 = ' + c.add + '분 추가');
     lines.push('기본 구금 ' + c.mins + '분' + (c.add ? ' + ' + c.add + '분 = ' + c.raw + '분' : ''));
     if (c.capped) lines.push('최대 구금 ' + MAXMIN + '분을 넘어 ' + MAXMIN + '분으로 처리');
@@ -417,7 +418,7 @@ function renderSay(c){
   var host = $('say');
   host.innerHTML = '';
   if (!picked.length){
-    host.appendChild(el('div', 'empty', '죄목을 고르면 읽을 문구가 만들어집니다'));
+    host.appendChild(el('div', 'empty', '죄목을 고르면 읽을 순서가 만들어집니다'));
     return;
   }
 
@@ -429,12 +430,10 @@ function renderSay(c){
   if (useBail) lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
   else if (c.jail > 0) lines.push('보석금 미사용으로 구금 ' + c.jail + '분 진행하겠습니다.');
 
-  lines.forEach(function(t){
+  lines.forEach(function(t, i){
     var row = el('div', 'sayrow');
+    row.appendChild(el('span', 'no', String(i + 1)));
     row.appendChild(el('div', 't', t));
-    var b = el('button', 'c', '복사');
-    b.addEventListener('click', function(){ copyText(t, b, row.querySelector('.t')); });
-    row.appendChild(b);
     host.appendChild(row);
   });
 }
@@ -493,7 +492,7 @@ $('q').addEventListener('input', applySearch);
 $('have').addEventListener('input', render);
 $('bailY').addEventListener('click', function(){ useBail = true; render(); });
 $('bailN').addEventListener('click', function(){ useBail = false; render(); });
-$('reset').addEventListener('click', function(){ picked = []; useBail = false; $('have').value = 0; render(); });
+$('reset').addEventListener('click', function(){ picked = []; useBail = true; $('have').value = 0; render(); });
 </script>
 </body>
 </html>
