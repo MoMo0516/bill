@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>벌금 · 구금 계산기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#0D1219; --surface:#151D28; --raised:#1B2533; --line:#27313F;
+    --ink:#E7EDF5; --muted:#8D9BAD;
+    --accent:#E0A340; --accent-ink:#1A1206; --accent-soft:#2A2113;
+    --navy:#2F4C7A; --navy-soft:#16233A;
+    --ok:#46B07C; --ok-soft:#122A20;
+    --bad:#E0645C; --bad-soft:#2C1917;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px rgba(0,0,0,.42);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F3F6FA; --line:#D7DFE9;
+      --ink:#0F1821; --muted:#5A6675;
+      --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
+      --navy:#1F3352; --navy-soft:#E9EFF7;
+      --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
+      --shadow:0 1px 2px rgba(15,24,33,.05), 0 12px 32px rgba(15,24,33,.09);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F3F6FA; --line:#D7DFE9;
+    --ink:#0F1821; --muted:#5A6675;
+    --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
+    --navy:#1F3352; --navy-soft:#E9EFF7;
+    --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
+    --shadow:0 1px 2px rgba(15,24,33,.05), 0 12px 32px rgba(15,24,33,.09);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased; font-size:15px; line-height:1.5;
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+  button{font-family:inherit;cursor:pointer;border:1px solid var(--line);border-radius:9px;
+         background:var(--raised);color:var(--ink);transition:background .12s,border-color .12s,color .12s}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  /* 상단 */
+  .top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+  .topin{max-width:1220px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand .k{font-size:10.5px;letter-spacing:.16em;color:var(--accent);font-weight:600}
+  .brand h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em}
+  .search{margin-left:auto;position:relative}
+  .search input{width:240px;padding:9px 12px 9px 32px;font-size:14px;font-family:inherit;
+    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
+  .search .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px}
+  .btn{padding:9px 15px;font-size:13.5px;font-weight:600}
+  .btn.ghost{color:var(--muted)}
+  .btn.ghost:hover{color:var(--ink);border-color:var(--accent)}
+
+  .page{max-width:1220px;margin:0 auto;padding:20px 20px 70px;
+        display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+  @media (max-width:1000px){.page{grid-template-columns:1fr}}
+
+  /* 죄목 */
+  .cat{background:var(--surface);border:1px solid var(--line);border-radius:13px;
+       box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
+  .cat.hide{display:none}
+  .cat > h2{margin:0;padding:11px 16px;font-size:13px;font-weight:700;letter-spacing:.02em;
+            background:var(--raised);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:center}
+  .cat > h2 .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;
+                 border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+  .cat > h2 .tag.jail{border-color:var(--bad);color:var(--bad)}
+  .cat > h2 .tag.field{border-color:var(--ok);color:var(--ok)}
+  .cat > h2 .tag.story{border-color:var(--accent);color:var(--accent)}
+  .crimes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:var(--line)}
+  .crime{background:var(--surface);border:0;border-radius:0;padding:11px 14px;text-align:left;
+         display:flex;flex-direction:column;gap:3px}
+  .crime.hide{display:none}
+  .crime:hover{background:var(--raised)}
+  .crime[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+  .crime .nm{font-size:14.5px;font-weight:600}
+  .crime .vals{font-size:12.5px;color:var(--muted)}
+  .crime .vals b{color:var(--ink);font-weight:600}
+  .crime .vals .j{color:var(--bad)}
+  .crime .d{font-size:11.5px;color:var(--muted);opacity:.8;line-height:1.35}
+
+  /* 오른쪽 계산 */
+  .side{position:sticky;top:74px;display:flex;flex-direction:column;gap:14px}
+  @media (max-width:1000px){.side{position:static}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+        box-shadow:var(--shadow);overflow:hidden}
+  .card > h2{margin:0;padding:12px 16px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+             color:var(--muted);border-bottom:1px solid var(--line);background:var(--raised);
+             display:flex;align-items:center;gap:8px}
+  .card > h2 .n{margin-left:auto;font-size:12px;color:var(--muted);letter-spacing:0;text-transform:none}
+
+  .pickrow{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line)}
+  .pickrow:first-child{border-top:0}
+  .pickrow.over{background:var(--bad-soft)}
+  .pickrow .nm{flex:1;font-size:14px}
+  .pickrow .v{font-size:13px;color:var(--muted);white-space:nowrap}
+  .pickrow .v b{color:var(--ink)}
+  .pickrow .x{padding:3px 8px;font-size:11.5px;color:var(--muted);border-radius:6px}
+  .pickrow .x:hover{color:var(--bad);border-color:var(--bad)}
+  .empty{padding:22px 16px;text-align:center;color:var(--muted);font-size:13.5px}
+
+  .note{margin:0;padding:11px 14px;background:var(--accent-soft);color:var(--accent);
+        font-size:12.5px;font-weight:600;border-top:1px solid var(--accent);display:none}
+  .note.on{display:block}
+  .warn{margin:0;padding:11px 14px;background:var(--bad-soft);color:var(--bad);
+        font-size:12.5px;font-weight:600;border-top:1px solid var(--bad);display:none}
+  .warn.on{display:block}
+  .warn button{margin-top:8px;padding:6px 11px;font-size:12px;color:var(--bad);border-color:var(--bad);
+               background:transparent;font-weight:700}
+
+  .calcbody{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+  .seg{display:flex;gap:6px}
+  .seg button{flex:1;padding:9px;font-size:13.5px;color:var(--muted)}
+  .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+    color:var(--accent-ink);font-weight:700}
+  .fld{display:flex;align-items:center;gap:10px}
+  .fld label{font-size:13px;color:var(--muted);flex:1}
+  .fld input{width:130px;padding:8px 11px;font-size:15px;text-align:right;
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
+
+  .out{border-top:1px solid var(--line);padding:16px;background:var(--raised)}
+  .big{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+  .big .v{font-size:32px;font-weight:700;letter-spacing:-.02em;color:var(--accent)}
+  .big .u{font-size:15px;color:var(--muted)}
+  .sub{font-size:13px;color:var(--muted);line-height:1.6}
+  .sub b{color:var(--ink)}
+  .capped{color:var(--bad);font-weight:600}
+
+  .say{border-top:1px solid var(--line)}
+  .sayrow{display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+  .sayrow:first-child{border-top:0}
+  .sayrow .t{flex:1;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;word-break:break-word}
+  .sayrow .c{flex:none;padding:7px 13px;font-size:12.5px;font-weight:700;
+             background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .sayrow .c.done{background:var(--ok);border-color:var(--ok);color:#fff}
+  .sayrow .c.fail{background:transparent;border-color:var(--bad);color:var(--bad)}
+
+  .foot{max-width:1220px;margin:0 auto;padding:0 20px 40px;font-size:12px;color:var(--muted);text-align:center}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="topin">
+    <div class="brand">
+      <span class="k">GTA FIVEM · 시그널 서버</span>
+      <h1>벌금 · 구금 계산기</h1>
+    </div>
+    <div class="search">
+      <span class="ic">⌕</span>
+      <input type="search" id="q" placeholder="죄목 검색" autocomplete="off">
+    </div>
+    <button class="btn ghost" id="reset">전체 지우기</button>
+  </div>
+</header>
+
+<div class="page">
+  <main id="cats"></main>
+
+  <aside class="side">
+    <section class="card">
+      <h2>선택한 죄목 <span class="n" id="pickCount">0개</span></h2>
+      <div id="picks"><div class="empty">왼쪽에서 죄목을 눌러 담으세요</div></div>
+      <div class="note" id="note"></div>
+      <div class="warn" id="warn"></div>
+    </section>
+
+    <section class="card">
+      <h2>보석금</h2>
+      <div class="calcbody">
+        <div class="seg">
+          <button id="bailY" aria-pressed="false">사용</button>
+          <button id="bailN" aria-pressed="true">미사용</button>
+        </div>
+        <div class="fld" id="haveWrap">
+          <label for="have">낼 수 있는 금액 (만원)</label>
+          <input type="number" id="have" value="0" min="0" step="100">
+        </div>
+      </div>
+      <div class="out">
+        <div class="big"><span class="v mono" id="outMain">—</span></div>
+        <div class="sub" id="outSub"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>구두 고지 문구</h2>
+      <div class="say" id="say"></div>
+    </section>
+  </aside>
+</div>
+
+<p class="foot">한 번에 부과할 수 있는 범죄는 최대 4개 · 구금 1분 = 100만원 · 최대 구금 120분</p>
+
+<script>
+var LAWS = [
+  { cat:'중대범죄', items:[
+    { n:'재물손괴',    f:1000, m:10 },
+    { n:'폭행죄',      f:1000, m:10 },
+    { n:'도주',        f:1500, m:10, d:'PM 정차 명령 · 사유지 3회 이탈 명령 불응' },
+    { n:'성희롱',      f:1500, m:10 },
+    { n:'도박개장',    f:1500, m:15, d:'금액 + 룰렛/가위바위보 명시한 건만' },
+    { n:'차량절도',    f:1500, m:15 },
+    { n:'과실치상죄',  f:1500, m:15 },
+    { n:'과실치사죄',  f:3000, m:20 }
+  ]},
+  { cat:'특수범죄', items:[
+    { n:'불법무기 소지 및 광고', f:1500, m:15 },
+    { n:'불법무기 판매 및 구매', f:2000, m:15 },
+    { n:'불법장물 소지 및 광고', f:1500, m:15 },
+    { n:'납치 및 유괴',          f:2000, m:20 },
+    { n:'살인',                  f:4000, m:30 }
+  ]},
+  { cat:'공무원 관련법', items:[
+    { n:'공무원 명예훼손',        f:1500, m:10 },
+    { n:'공무원 사칭',            f:1500, m:10, d:'경찰이 아님에도 경찰 업무 진행' },
+    { n:'공무집행 방해죄',        f:1500, m:10 },
+    { n:'공무원 폭행',            f:2000, m:15 },
+    { n:'공무원 살인',            f:5000, m:30 },
+    { n:'공무원 뇌물공여 & 수수', f:5000, m:30 }
+  ]},
+  { cat:'스토리 RP', story:true, items:[
+    { n:'ATM RP',       f:3000,  m:10 },
+    { n:'편의점 RP',    f:5000,  m:15 },
+    { n:'보석상 RP',    f:5000,  m:20 },
+    { n:'카지노 RP',    f:10000, m:30 },
+    { n:'중앙은행 RP',  f:15000, m:30 },
+    { n:'영장 RP',      f:30000, m:30, pub:true },
+    { n:'차량 영장 RP', f:30000, m:30, pub:true }
+  ]}
+];
+</script>
+<script>
+var MAXCRIMES = 4, PERMIN = 100, MAXMIN = 120;
+var picked = [], useBail = false;
+
+function $(id){ return document.getElementById(id); }
+function el(t, c, x){ var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
+function won(n){
+  if (n >= 10000){
+    var e = Math.floor(n / 10000), rest = n % 10000;
+    return e + '억' + (rest ? ' ' + rest.toLocaleString() + '만원' : '');
+  }
+  return n.toLocaleString() + '만원';
+}
+function wonOf(it){ return (it.pub ? '공금 ' : '') + won(it.f); }
+
+/* ── 죄목 목록 ── */
+function buildCats(){
+  var host = $('cats');
+  LAWS.forEach(function(cat){
+    var box = el('section', 'cat');
+    box.dataset.cat = cat.cat;
+    var h = el('h2', null, cat.cat);
+    h.appendChild(el('span', 'tag ' + (cat.story ? 'story' : 'jail'),
+      cat.story ? '현장 처리 · 다른 죄목 묻지 않음' : '구금 있음 · 유치장'));
+    box.appendChild(h);
+
+    var grid = el('div', 'crimes');
+    cat.items.forEach(function(it){
+      it.story = !!cat.story;
+      var b = el('button', 'crime');
+      b.dataset.name = it.n;
+      b.setAttribute('aria-pressed', 'false');
+      b.appendChild(el('span', 'nm', it.n));
+      var v = el('span', 'vals');
+      v.appendChild(el('b', null, wonOf(it)));
+      if (it.m > 0){
+        v.appendChild(document.createTextNode(' · '));
+        var j = el('span', 'j', '구금 ' + it.m + '분');
+        v.appendChild(j);
+      } else {
+        v.appendChild(document.createTextNode(' · 구금 없음'));
+      }
+      b.appendChild(v);
+      if (it.d) b.appendChild(el('span', 'd', it.d));
+      b.addEventListener('click', function(){ toggle(it); });
+      grid.appendChild(b);
+    });
+    box.appendChild(grid);
+    host.appendChild(box);
+  });
+}
+
+function toggle(it){
+  var i = picked.findIndex(function(p){ return p.n === it.n; });
+  if (i >= 0) picked.splice(i, 1); else picked.push(it);
+  render();
+}
+
+/* ── 계산 ── */
+function effective(){
+  /* 벌금 · 구금이 높은 순으로 4개까지만 부과 */
+  var sorted = picked.slice().sort(function(a, b){
+    return (b.f + b.m * PERMIN) - (a.f + a.m * PERMIN);
+  });
+  return sorted.slice(0, MAXCRIMES);
+}
+
+function calc(){
+  var use = effective();
+  var fine = use.reduce(function(s, x){ return s + x.f; }, 0);
+  var mins = use.reduce(function(s, x){ return s + x.m; }, 0);
+  var bail = mins * PERMIN;
+  var have = Math.max(0, parseInt($('have').value, 10) || 0);
+
+  if (useBail){
+    return { fine:fine, mins:mins, bail:bail, total:fine + bail, jail:0, capped:false, use:use };
+  }
+  var unpaid = Math.max(0, fine - have);
+  var add = Math.floor(unpaid / PERMIN);
+  var raw = mins + add;
+  return { fine:fine, mins:mins, bail:bail, paid:Math.min(fine, have), unpaid:unpaid,
+           add:add, jail:Math.min(MAXMIN, raw), raw:raw, capped:raw > MAXMIN, use:use };
+}
+
+/* ── 그리기 ── */
+function render(){
+  document.querySelectorAll('.crime').forEach(function(b){
+    b.setAttribute('aria-pressed', picked.some(function(p){ return p.n === b.dataset.name; }) ? 'true' : 'false');
+  });
+
+  var use = effective();
+  var box = $('picks');
+  box.innerHTML = '';
+  $('pickCount').textContent = picked.length + '개';
+
+  if (!picked.length){
+    box.appendChild(el('div', 'empty', '왼쪽에서 죄목을 눌러 담으세요'));
+  } else {
+    picked.forEach(function(p){
+      var over = use.indexOf(p) < 0;
+      var row = el('div', 'pickrow' + (over ? ' over' : ''));
+      row.appendChild(el('span', 'nm', p.n + (over ? '  (제외됨)' : '')));
+      var v = el('span', 'v');
+      v.appendChild(el('b', null, wonOf(p)));
+      v.appendChild(document.createTextNode(p.m ? ' · ' + p.m + '분' : ' · 구금 없음'));
+      row.appendChild(v);
+      var x = el('button', 'x', '빼기');
+      x.addEventListener('click', function(){ toggle(p); });
+      row.appendChild(x);
+      box.appendChild(row);
+    });
+  }
+
+  var storyPicked = picked.filter(function(p){ return p.story; });
+  var note = $('note');
+  if (storyPicked.length){
+    note.className = 'note on';
+    note.textContent = storyPicked.some(function(p){ return /영장/.test(p.n); })
+      ? '영장 RP는 스토리RP 중 유일하게 다른 죄목을 함께 물을 수 있습니다.'
+      : '스토리RP는 현장에서 처리하고 다른 범죄 죄목을 묻지 않습니다. (영장 RP 제외)';
+  } else note.className = 'note';
+
+  var w = $('warn');
+  if (picked.length > MAXCRIMES){
+    w.className = 'warn on';
+    w.innerHTML = '';
+    w.appendChild(document.createTextNode(
+      '한 번에 부과할 수 있는 범죄는 최대 ' + MAXCRIMES + '개입니다. 벌금 · 구금이 높은 순으로 ' +
+      MAXCRIMES + '개만 계산했습니다.'));
+    var fix = el('button', null, '초과분 빼기');
+    fix.addEventListener('click', function(){ picked = effective(); render(); });
+    w.appendChild(document.createElement('br'));
+    w.appendChild(fix);
+  } else w.className = 'warn';
+
+  $('bailY').setAttribute('aria-pressed', useBail ? 'true' : 'false');
+  $('bailN').setAttribute('aria-pressed', useBail ? 'false' : 'true');
+  $('haveWrap').style.display = useBail ? 'none' : 'flex';
+
+  var c = calc();
+  var main = $('outMain'), sub = $('outSub');
+
+  if (!picked.length){
+    main.textContent = '—';
+    sub.textContent = '죄목을 고르면 부과 금액과 구금시간이 나옵니다.';
+  } else if (useBail){
+    main.textContent = won(c.total);
+    sub.innerHTML = '';
+    sub.appendChild(document.createTextNode('벌금 ' + won(c.fine) + ' + 보석금 ' + won(c.bail) +
+      ' (구금 ' + c.mins + '분 × ' + PERMIN + '만원)'));
+    sub.appendChild(document.createElement('br'));
+    var b1 = el('b', null, '구금 없음');
+    sub.appendChild(document.createTextNode('보석금을 냈으므로 '));
+    sub.appendChild(b1);
+    sub.appendChild(document.createTextNode('.'));
+  } else {
+    main.textContent = c.mins || c.add ? ('구금 ' + c.jail + '분') : won(c.fine);
+    sub.innerHTML = '';
+    var lines = ['벌금 ' + won(c.fine) + ' 중 ' + won(c.paid) + ' 납부'];
+    if (c.unpaid > 0) lines.push('미납 ' + won(c.unpaid) + ' ÷ ' + PERMIN + '만원 = ' + c.add + '분 추가');
+    lines.push('기본 구금 ' + c.mins + '분' + (c.add ? ' + ' + c.add + '분 = ' + c.raw + '분' : ''));
+    if (c.capped) lines.push('최대 구금 ' + MAXMIN + '분을 넘어 ' + MAXMIN + '분으로 처리');
+    lines.forEach(function(t, i){
+      if (i) sub.appendChild(document.createElement('br'));
+      var s = el('span', c.capped && i === lines.length - 1 ? 'capped' : null, t);
+      sub.appendChild(s);
+    });
+  }
+
+  renderSay(c);
+}
+
+/* ── 구두 고지 ── */
+function renderSay(c){
+  var host = $('say');
+  host.innerHTML = '';
+  if (!picked.length){
+    host.appendChild(el('div', 'empty', '죄목을 고르면 읽을 문구가 만들어집니다'));
+    return;
+  }
+
+  var lines = [];
+  var names = c.use.map(function(x){ return x.n; }).join(', ');
+  lines.push(names + '에 대해 인정 하십니까?');
+  lines.push('벌금 ' + won(c.fine) + '에 구금 ' + c.mins + '분 입니다.');
+  lines.push('보석금 사용하시나요?');
+  if (useBail) lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
+  else if (c.jail > 0) lines.push('보석금 미사용으로 구금 ' + c.jail + '분 진행하겠습니다.');
+
+  lines.forEach(function(t){
+    var row = el('div', 'sayrow');
+    row.appendChild(el('div', 't', t));
+    var b = el('button', 'c', '복사');
+    b.addEventListener('click', function(){ copyText(t, b, row.querySelector('.t')); });
+    row.appendChild(b);
+    host.appendChild(row);
+  });
+}
+
+/* ── 복사 ── */
+function legacyCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly','');
+  ta.style.position = 'fixed'; ta.style.top = '-1000px';
+  document.body.appendChild(ta);
+  ta.select(); ta.setSelectionRange(0, text.length);
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+function selectNode(n){
+  try {
+    var r = document.createRange(); r.selectNodeContents(n);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  } catch(e){}
+}
+function flash(b, cls, label){
+  b.classList.remove('done','fail');
+  if (cls) b.classList.add(cls);
+  b.textContent = label;
+  clearTimeout(b._t);
+  b._t = setTimeout(function(){ b.classList.remove('done','fail'); b.textContent = '복사'; }, 1500);
+}
+function copyText(text, btn, node){
+  function ok(){ flash(btn, 'done', '복사됨'); }
+  function no(){ selectNode(node); flash(btn, 'fail', 'Ctrl+C'); }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok, function(){ legacyCopy(text) ? ok() : no(); });
+  } else legacyCopy(text) ? ok() : no();
+}
+
+/* ── 검색 ── */
+function applySearch(){
+  var q = $('q').value.trim().toLowerCase().replace(/\s+/g, '');
+  document.querySelectorAll('.cat').forEach(function(cat){
+    var any = false;
+    cat.querySelectorAll('.crime').forEach(function(b){
+      var hit = !q || (b.textContent.toLowerCase().replace(/\s+/g, '').indexOf(q) >= 0);
+      b.classList.toggle('hide', !hit);
+      if (hit) any = true;
+    });
+    cat.classList.toggle('hide', !any);
+  });
+}
+
+/* ── 시작 ── */
+buildCats();
+render();
+$('q').addEventListener('input', applySearch);
+$('have').addEventListener('input', render);
+$('bailY').addEventListener('click', function(){ useBail = true; render(); });
+$('bailN').addEventListener('click', function(){ useBail = false; render(); });
+$('reset').addEventListener('click', function(){ picked = []; useBail = false; $('have').value = 0; render(); });
+</script>
+</body>
+</html>
