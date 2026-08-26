@@ -127,13 +127,61 @@
     font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
     background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
 
-  .out{border-top:1px solid var(--line);padding:16px;background:var(--raised)}
+  .out{padding:18px 16px;background:var(--raised)}
+  .split2{margin:14px 0 0;padding:14px 0 0;border-top:1px solid var(--line);
+          display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:15px}
+  .split2 dt{color:var(--muted);font-weight:600}
+  .split2 dt::after{content:' -'}
+  .split2 dd{margin:0;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+             font-weight:600;text-align:right}
+  .split2 dd .m{display:block;font-family:inherit;font-weight:400;font-size:11.5px;color:var(--muted)}
+
+  /* 대표 납부 */
+  .people{border-top:1px solid var(--line);padding:14px 16px;background:var(--surface)}
+  .prow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .prow label{font-size:13px;color:var(--muted);font-weight:600}
+  .padd{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .padd button{flex:1;min-width:62px;padding:7px 6px;font-size:13px;font-weight:600;color:var(--muted)}
+  .padd button:hover{color:var(--accent);border-color:var(--accent)}
+  .padd button.rst{flex:none;min-width:auto;padding:7px 11px;font-size:12px}
+  .phint{font-size:11.5px;color:var(--muted);margin-left:auto}
+  .punit{font-size:13px;color:var(--muted)}
+  .prow input{width:82px;padding:7px 10px;font-size:15px;text-align:center;
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
+  .ptotal{margin-top:11px;padding:12px 14px;border-radius:11px;background:var(--accent-soft);
+          border:1px solid var(--accent);display:none}
+  .ptotal.on{display:block}
+  .ptotal .lb{font-size:11.5px;letter-spacing:.06em;color:var(--accent);font-weight:700}
+  .ptotal .v{font-size:25px;font-weight:700;letter-spacing:-.02em;color:var(--accent);
+             font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;margin-top:2px}
+  .ptotal .m{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .psplit{margin-top:12px;padding-top:12px;border-top:1px solid var(--accent);
+          grid-template-columns:auto 1fr;font-size:14px}
+  .psplit dt{color:var(--muted)}
+  .psplit dd{color:var(--ink)}
+  .psplit dd .m{font-size:11px;margin-top:1px}
   .big{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
   .big .v{font-size:32px;font-weight:700;letter-spacing:-.02em;color:var(--accent)}
   .big .u{font-size:15px;color:var(--muted)}
   .sub{font-size:13px;color:var(--muted);line-height:1.6}
   .sub b{color:var(--ink)}
   .capped{color:var(--bad);font-weight:600}
+
+  /* 금액 맞추기 */
+  .mixcard h2 .n{color:var(--ok);border-color:var(--ok)}
+  .mixlb{padding:12px 14px 5px;font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+  .mixgrp{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+  .mixgrp .rn{flex:none;min-width:74px;font-size:12px;color:var(--muted);font-weight:700;padding-top:3px}
+  .mixgrp .rn .rep{display:block;font-size:10.5px;color:var(--ok);font-weight:700;margin-top:2px}
+  .mixgrp .cs{flex:1;display:flex;flex-wrap:wrap;gap:5px}
+  .cz{display:inline-block;padding:4px 9px;border-radius:7px;font-size:13.5px;font-weight:700;
+      background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok)}
+  .mixgrp .amt{flex:none;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+               font-size:12.5px;color:var(--muted);white-space:nowrap;padding-top:5px}
+  .mixsum{display:flex;gap:10px;padding:11px 14px;border-top:1px solid var(--ok);
+          background:var(--ok-soft);color:var(--ok);font-size:13.5px;font-weight:700}
+  .mixsum .v{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 
   .say{border-top:1px solid var(--line)}
   .sayrow{display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
@@ -176,21 +224,30 @@
     </section>
 
     <section class="card">
-      <h2>보석금</h2>
-      <div class="calcbody">
-        <div class="seg">
-          <button id="bailY" aria-pressed="true">사용</button>
-          <button id="bailN" aria-pressed="false">미사용</button>
-        </div>
-        <div class="fld" id="haveWrap">
-          <label for="have">용의자 지불 금액 (만원)</label>
-          <input type="number" id="have" value="0" min="0" step="100">
-        </div>
-      </div>
+      <h2>부과 금액 <span class="n">보석금 사용 기준</span></h2>
       <div class="out">
         <div class="big"><span class="v mono" id="outMain">—</span></div>
+        <dl class="split2" id="outSplit"></dl>
         <div class="sub" id="outSub"></div>
       </div>
+
+      <div class="people" id="peopleWrap">
+        <div class="padd" id="padd"></div>
+        <div class="prow">
+          <label for="people">인원수</label>
+          <span class="phint">최대 50명 · 대표가 몰아서 낼 때</span>
+          <input type="number" id="people" value="0" min="0" max="50" step="1" inputmode="numeric">
+          <span class="punit">명</span>
+        </div>
+        <div class="ptotal" id="ptotal"></div>
+      </div>
+    </section>
+
+    <section class="card mixcard" id="mixCard" hidden>
+      <h2>금액 맞추기 <span class="n" id="mixN"></span></h2>
+      <div class="mixlb">부과하기</div>
+      <div id="mix"></div>
+      <div class="mixsum" id="mixSum"></div>
     </section>
 
     <section class="card">
@@ -205,14 +262,14 @@
 <script>
 var LAWS = [
   { cat:'중대범죄', items:[
-    { n:'재물손괴',    f:1000, m:10 },
-    { n:'폭행죄',      f:1500, m:10 },
+    { n:'재물손괴',    f:1000, m:10, d:'타인의 물건 · 차량을 부숨' },
+    { n:'폭행죄',      f:1500, m:10, d:'때렸으나 다치지 않음' },
     { n:'도주',        f:2000, m:10, d:'PM 정차 명령 · 사유지 3회 이탈 명령 불응' },
     { n:'성희롱',      f:2000, m:10 },
     { n:'도박개장',    f:1500, m:15, d:'금액 + 룰렛/가위바위보 명시한 건만' },
     { n:'차량절도',    f:2000, m:15 },
-    { n:'과실치상죄',  f:2500, m:15 },
-    { n:'과실치사죄',  f:3500, m:20 }
+    { n:'과실치상죄',  f:2500, m:15, d:'죽일 의도 없이 다치게 함 — 피해자 생존' },
+    { n:'과실치사죄',  f:3500, m:20, d:'죽일 의도 없이 죽게 함 — 피해자 사망' }
   ]},
   { cat:'특수범죄', items:[
     { n:'불법무기 소지 및 광고', f:2000, m:15 },
@@ -220,7 +277,7 @@ var LAWS = [
     { n:'마약류 소지죄',         f:1500, m:15 },
     { n:'마약류 판매',           f:2000, m:15 },
     { n:'납치 및 유괴',          f:2500, m:20 },
-    { n:'살인',                  f:5000, m:30 }
+    { n:'살인',                  f:5000, m:30, d:'죽일 의도로 죽게 함 — 고의' }
   ]},
   { cat:'공무원 관련법', items:[
     { n:'공무원 명예훼손',        f:1500, m:10 },
@@ -240,10 +297,25 @@ var LAWS = [
     { n:'차량 영장 RP', f:30000, m:30, pub:true }
   ]}
 ];
+
+/* 금액 맞추기 — 금액별 사용 가능한 죄목 (한 부과 창에서 같은 죄목은 1회만 · 공금 · 700만원 단위 제외) */
+var TIER = [
+  { f:15000, names:['중앙은행 RP'] },
+  { f:10000, names:['카지노 RP'] },
+  { f:9000,  names:['공무원 뇌물공여 & 수수'] },
+  { f:5000,  names:['편의점 RP','보석상 RP','살인','공무원 살인'] },
+  { f:3500,  names:['과실치사죄'] },
+  { f:3000,  names:['ATM RP','미허가 비행','저공비행'] },
+  { f:2500,  names:['과실치상죄','불법무기 판매 및 구매','납치 및 유괴'] },
+  { f:2000,  names:['도주','차량절도','공무집행 방해죄','성희롱','공무원 사칭','공무원 폭행','불법무기 소지 및 광고','마약류 판매'] },
+  { f:1500,  names:['폭행죄','도박개장','공무원 명예훼손','마약류 소지죄'] },
+  { f:1000,  names:['모욕','재물손괴','명예훼손','업무방해죄','공갈협박','공연음란'] },
+  { f:500,   names:['소음공해','주정차위반'] }
+];
 </script>
 <script>
 var MAXCRIMES = 4, PERMIN = 100, MAXMIN = 120;
-var picked = [], useBail = true;
+var picked = [], people = 0;
 
 function $(id){ return document.getElementById(id); }
 function el(t, c, x){ var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
@@ -313,16 +385,9 @@ function calc(){
   var fine = use.reduce(function(s, x){ return s + x.f; }, 0);
   var mins = use.reduce(function(s, x){ return s + x.m; }, 0);
   var bail = mins * PERMIN;
-  var have = Math.max(0, parseInt($('have').value, 10) || 0);
-
-  if (useBail){
-    return { fine:fine, mins:mins, bail:bail, total:fine + bail, jail:0, capped:false, use:use };
-  }
-  var unpaid = Math.max(0, fine - have);
-  var add = Math.floor(unpaid / PERMIN);
-  var raw = mins + add;
-  return { fine:fine, mins:mins, bail:bail, paid:Math.min(fine, have), unpaid:unpaid,
-           add:add, jail:Math.min(MAXMIN, raw), raw:raw, capped:raw > MAXMIN, use:use };
+  var total = fine + bail;
+  return { use:use, fine:fine, mins:mins, bail:bail, total:total,
+           people:people, allFine:fine * people, allBail:bail * people, allTotal:total * people };
 }
 
 /* ── 그리기 ── */
@@ -376,41 +441,177 @@ function render(){
     w.appendChild(fix);
   } else w.className = 'warn';
 
-  $('bailY').setAttribute('aria-pressed', useBail ? 'true' : 'false');
-  $('bailN').setAttribute('aria-pressed', useBail ? 'false' : 'true');
-  $('haveWrap').style.display = useBail ? 'none' : 'flex';
-
   var c = calc();
-  var main = $('outMain'), sub = $('outSub');
+  var main = $('outMain'), sp = $('outSplit'), sub = $('outSub');
+  sp.innerHTML = '';
 
   if (!picked.length){
     main.textContent = '—';
-    sub.textContent = '죄목을 고르면 부과 금액과 구금시간이 나옵니다.';
-  } else if (useBail){
-    main.textContent = won(c.total);
-    sub.innerHTML = '';
-    sub.appendChild(document.createTextNode('벌금 ' + won(c.fine) + ' + 보석금 ' + won(c.bail) +
-      ' (구금 ' + c.mins + '분 × ' + PERMIN + '만원)'));
-    sub.appendChild(document.createElement('br'));
-    var b1 = el('b', null, '구금 없음');
-    sub.appendChild(document.createTextNode('보석금을 냈으므로 '));
-    sub.appendChild(b1);
-    sub.appendChild(document.createTextNode('.'));
+    sub.textContent = '죄목을 고르면 부과 금액이 나옵니다.';
   } else {
-    main.textContent = c.mins || c.add ? ('구금 ' + c.jail + '분') : won(c.fine);
-    sub.innerHTML = '';
-    var lines = ['벌금 ' + won(c.fine) + ' 중 ' + won(c.paid) + ' 지불'];
-    if (c.unpaid > 0) lines.push('미납 ' + won(c.unpaid) + ' ÷ ' + PERMIN + '만원 = ' + c.add + '분 추가');
-    lines.push('기본 구금 ' + c.mins + '분' + (c.add ? ' + ' + c.add + '분 = ' + c.raw + '분' : ''));
-    if (c.capped) lines.push('최대 구금 ' + MAXMIN + '분을 넘어 ' + MAXMIN + '분으로 처리');
-    lines.forEach(function(t, i){
-      if (i) sub.appendChild(document.createElement('br'));
-      var s = el('span', c.capped && i === lines.length - 1 ? 'capped' : null, t);
-      sub.appendChild(s);
-    });
+    main.textContent = won(c.total);
+
+    var dt1 = el('dt', null, '벌금');
+    var dd1 = el('dd', null, won(c.fine));
+    var dt2 = el('dt', null, '보석금');
+    var dd2 = el('dd', null, won(c.bail));
+    dd2.appendChild(el('span', 'm', '구금 ' + c.mins + '분 × ' + PERMIN + '만원'));
+    [dt1, dd1, dt2, dd2].forEach(function(n){ sp.appendChild(n); });
+
+    sub.textContent = '';
   }
 
+  /* 대표 납부 */
+  var padd = $('padd');
+  if (!padd.dataset.built){
+    [1, 2, 5, 10].forEach(function(n){
+      var b = el('button', null, '+' + n + '명');
+      b.addEventListener('click', function(){
+        people = Math.min(50, people + n);
+        $('people').value = people;
+        render();
+      });
+      padd.appendChild(b);
+    });
+    var rst = el('button', 'rst', '초기화');
+    rst.title = '인원수를 0명으로 되돌립니다';
+    rst.addEventListener('click', function(){ people = 0; $('people').value = 0; render(); });
+    padd.appendChild(rst);
+    padd.dataset.built = '1';
+  }
+
+  var pt = $('ptotal');
+  if (picked.length && people >= 1){
+    pt.className = 'ptotal on';
+    pt.innerHTML = '';
+    pt.appendChild(el('div', 'lb', people + '명 대표 납부'));
+    pt.appendChild(el('div', 'v', won(c.allTotal)));
+
+    var dl = el('dl', 'split2 psplit');
+    var a1 = el('dt', null, '벌금');
+    var b1 = el('dd', null, won(c.allFine));
+    b1.appendChild(el('span', 'm', won(c.fine) + ' × ' + people + '명'));
+    var a2 = el('dt', null, '보석금');
+    var b2 = el('dd', null, won(c.allBail));
+    b2.appendChild(el('span', 'm', won(c.bail) + ' × ' + people + '명'));
+    [a1, b1, a2, b2].forEach(function(n){ dl.appendChild(n); });
+    pt.appendChild(dl);
+  } else pt.className = 'ptotal';
+
+  renderMix(c);
   renderSay(c);
+}
+
+/* ── 금액 맞추기 ── */
+var U500 = 500, MAXPER = 4;      /* 한 부과 창 최대 죄목 4개 */
+var ROUNDVAL = null;             /* 한 창에서 만들 수 있는 금액 → 죄목 구성 */
+
+function buildRounds(){
+  if (ROUNDVAL) return ROUNDVAL;
+  var map = {};
+  var comp = [];
+  (function rec(start, val){
+    if (comp.length){
+      var cur = map[val];
+      if (!cur || cur.length > comp.length) map[val] = comp.slice();
+    }
+    if (comp.length === MAXPER) return;
+    for (var i = start; i < TIER.length; i++){
+      var used = 0;
+      for (var k = 0; k < comp.length; k++) if (comp[k] === i) used++;
+      if (used >= TIER[i].names.length) continue;
+      comp.push(i);
+      rec(i, val + TIER[i].f / U500);
+      comp.pop();
+    }
+  })(0, 0);
+  ROUNDVAL = map;
+  return map;
+}
+
+var mixCache = {};
+function combo(target){
+  if (!(target > 0)) return null;
+  if (mixCache[target]) return mixCache[target];
+  var t = target / U500;
+  if (t !== Math.floor(t)) return null;
+
+  var map = buildRounds();
+  var coins = Object.keys(map).map(Number).sort(function(x, y){ return y - x; });
+  var INF = 1e9, best = new Array(t + 1), from = new Array(t + 1);
+  best[0] = 0;
+  for (var v = 1; v <= t; v++){
+    best[v] = INF; from[v] = -1;
+    for (var i = 0; i < coins.length; i++){
+      var c = coins[i];
+      if (c > v) continue;
+      if (best[v - c] + 1 < best[v]){ best[v] = best[v - c] + 1; from[v] = c; }
+    }
+  }
+  if (best[t] >= INF) return null;
+
+  var seq = [], v2 = t;
+  while (v2 > 0){ var c2 = from[v2]; seq.push(c2); v2 -= c2; }
+  seq.sort(function(x, y){ return y - x; });
+
+  /* 같은 금액 회차끼리 묶기 */
+  var groups = [];
+  seq.forEach(function(v3){
+    var last = groups[groups.length - 1];
+    if (last && last.val === v3) last.n++;
+    else groups.push({ val:v3, n:1, crimes:namesFor(map[v3]) });
+  });
+
+  var r = { groups:groups, rounds:seq.length, target:target };
+  mixCache[target] = r;
+  return r;
+}
+
+function namesFor(comp){
+  var seen = {}, out = [];
+  comp.forEach(function(i){
+    var k = seen[i] || 0; seen[i] = k + 1;
+    out.push({ n:TIER[i].names[k], f:TIER[i].f });
+  });
+  return out;
+}
+
+function renderMix(c){
+  var card = $('mixCard'), host = $('mix');
+  if (!picked.length){ card.hidden = true; return; }
+
+  var target = (c.people >= 1) ? c.allTotal : c.total;
+  var r = combo(target);
+  card.hidden = false;
+  host.innerHTML = '';
+  $('mixN').textContent = won(target);
+
+  if (!r){
+    host.appendChild(el('div', 'empty', '죄목 조합으로 딱 맞출 수 없는 금액입니다.'));
+    $('mixSum').textContent = '';
+    return;
+  }
+
+  var no = 1;
+  r.groups.forEach(function(g){
+    var row = el('div', 'mixgrp');
+    var rn = el('div', 'rn', g.n > 1 ? (no + '–' + (no + g.n - 1) + '회차') : (no + '회차'));
+    if (g.n > 1) rn.appendChild(el('span', 'rep', g.n + '번 반복'));
+    no += g.n;
+    row.appendChild(rn);
+
+    var cs = el('div', 'cs');
+    g.crimes.forEach(function(x){ cs.appendChild(el('span', 'cz', x.n)); });
+    row.appendChild(cs);
+
+    row.appendChild(el('div', 'amt', won(g.val * U500) + (g.n > 1 ? ' / 회' : '')));
+    host.appendChild(row);
+  });
+
+  var sum = r.groups.reduce(function(s2, g){ return s2 + g.val * U500 * g.n; }, 0);
+  $('mixSum').innerHTML = '';
+  $('mixSum').appendChild(el('span', null, sum === target ? '합계 (총액 일치)' : '합계 (불일치)'));
+  $('mixSum').appendChild(el('span', 'v', won(sum)));
 }
 
 /* ── 구두 고지 ── */
@@ -427,8 +628,8 @@ function renderSay(c){
   lines.push(names + '에 대해 인정 하십니까?');
   lines.push('벌금 ' + won(c.fine) + '에 구금 ' + c.mins + '분 입니다.');
   lines.push('보석금 사용하시나요?');
-  if (useBail) lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
-  else if (c.jail > 0) lines.push('보석금 미사용으로 구금 ' + c.jail + '분 진행하겠습니다.');
+  lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
+  if (c.people > 1) lines.push(c.people + '명분 합산하여 총 ' + won(c.allTotal) + ' 입니다.');
 
   lines.forEach(function(t, i){
     var row = el('div', 'sayrow');
@@ -489,10 +690,16 @@ function applySearch(){
 buildCats();
 render();
 $('q').addEventListener('input', applySearch);
-$('have').addEventListener('input', render);
-$('bailY').addEventListener('click', function(){ useBail = true; render(); });
-$('bailN').addEventListener('click', function(){ useBail = false; render(); });
-$('reset').addEventListener('click', function(){ picked = []; useBail = true; $('have').value = 0; render(); });
+$('people').addEventListener('input', function(){
+  var v = parseInt(this.value, 10);
+  people = (isNaN(v) || v < 0) ? 0 : Math.min(50, v);
+  if (v > 50) this.value = 50;          /* 50명이 상한 */
+  render();
+});
+$('people').addEventListener('blur', function(){
+  if (this.value === '' || parseInt(this.value, 10) < 0) this.value = 0;
+});
+$('reset').addEventListener('click', function(){ picked = []; people = 0; $('people').value = 0; render(); });
 </script>
 </body>
 </html>
