@@ -9,267 +9,230 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
   :root{
-    --bg:#0D1219; --surface:#151D28; --raised:#1B2533; --line:#27313F;
-    --ink:#E7EDF5; --muted:#8D9BAD;
-    --accent:#E0A340; --accent-ink:#1A1206; --accent-soft:#2A2113;
-    --navy:#2F4C7A; --navy-soft:#16233A;
-    --ok:#46B07C; --ok-soft:#122A20;
-    --bad:#E0645C; --bad-soft:#2C1917;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px rgba(0,0,0,.42);
+    --bg:#F3F6FA;--surface:#FFFFFF;--raised:#F7F9FC;--line:#DCE4EE;
+    --ink:#172033;--muted:#5C6879;--accent:#1D5FD1;--accent-ink:#FFFFFF;
+    --accent-soft:#EAF1FF;--navy:#163B69;--navy-soft:#EAF0F8;
+    --ok:#177A55;--ok-soft:#EAF7F1;--bad:#C43D49;--bad-soft:#FDEEEF;
+    --shadow:0 10px 28px rgba(22,52,95,.07)
   }
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]){
-      --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F3F6FA; --line:#D7DFE9;
-      --ink:#0F1821; --muted:#5A6675;
-      --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
-      --navy:#1F3352; --navy-soft:#E9EFF7;
-      --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
-      --shadow:0 1px 2px rgba(15,24,33,.05), 0 12px 32px rgba(15,24,33,.09);
-    }
+  :root[data-theme="dark"]{
+    --bg:#0E141C;--surface:#151D28;--raised:#1B2533;--line:#2B3645;
+    --ink:#E7EDF5;--muted:#98A6B8;--accent:#72A7FF;--accent-ink:#10203B;
+    --accent-soft:#182A46;--navy:#A9C8F4;--navy-soft:#19283C;
+    --ok:#50BC86;--ok-soft:#173126;--bad:#F07873;--bad-soft:#351D1D;
+    --shadow:0 12px 34px rgba(0,0,0,.28)
   }
-  :root[data-theme="light"]{
-    --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F3F6FA; --line:#D7DFE9;
-    --ink:#0F1821; --muted:#5A6675;
-    --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
-    --navy:#1F3352; --navy-soft:#E9EFF7;
-    --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
-    --shadow:0 1px 2px rgba(15,24,33,.05), 0 12px 32px rgba(15,24,33,.09);
-  }
-
   *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-    -webkit-font-smoothing:antialiased; font-size:15px; line-height:1.5;
-  }
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6}
   .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
-  button{font-family:inherit;cursor:pointer;border:1px solid var(--line);border-radius:9px;
-         background:var(--raised);color:var(--ink);transition:background .12s,border-color .12s,color .12s}
-  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  button,input{font:inherit}
+  button{cursor:pointer;border:1px solid var(--line);border-radius:9px;background:var(--raised);color:var(--ink);transition:background .12s,border-color .12s,color .12s,transform .12s}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  button:active{transform:translateY(1px)}
 
-  /* 상단 */
-  .top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
-  .topin{max-width:1220px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .brand .k{font-size:10.5px;letter-spacing:.16em;color:var(--accent);font-weight:600}
-  .brand h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em}
-  .search{margin-left:auto;position:relative}
-  .search input{width:240px;padding:9px 12px 9px 32px;font-size:14px;font-family:inherit;
-    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
-  .search .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px}
-  .btn{padding:9px 15px;font-size:13.5px;font-weight:600}
-  .btn.ghost{color:var(--muted)}
-  .btn.ghost:hover{color:var(--ink);border-color:var(--accent)}
+  .top{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(10px)}
+  :root[data-theme="dark"] .top{background:rgba(21,29,40,.96)}
+  .topin{max-width:1240px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{min-width:205px;line-height:1.15}
+  .brand .k{display:block;margin-bottom:3px;color:var(--accent);font-size:10px;font-weight:700;letter-spacing:.14em}
+  .brand h1{margin:0;font-size:18px;letter-spacing:-.02em}
+  .search{position:relative;margin-left:auto}
+  .search input{width:260px;height:39px;padding:0 36px 0 34px;border:1px solid var(--line);border-radius:10px;background:var(--raised);color:var(--ink)}
+  .search .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search .clear{position:absolute;right:7px;top:6px;width:27px;height:27px;padding:0;border:0;background:transparent;color:var(--muted);display:none}
+  .search.has-value .clear{display:block}
+  .search-count{min-width:72px;color:var(--muted);font-size:11.5px;text-align:center}
+  .reset{padding:8px 12px;color:var(--bad);border-color:#E7BDC2;background:var(--surface);font-size:12.5px;font-weight:600}
+  .theme-switch{display:flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--raised)}
+  .theme-switch button{padding:5px 9px;border:0;background:transparent;color:var(--muted);font-size:11.5px}
+  .theme-switch button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 5px rgba(22,52,95,.12)}
 
-  .page{max-width:1220px;margin:0 auto;padding:20px 20px 70px;
-        display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
-  @media (max-width:1000px){.page{grid-template-columns:1fr}}
+  .page{max-width:1240px;margin:0 auto;padding:18px 20px 64px}
+  .guide{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding:13px 16px;border:1px solid #CAD9EC;border-radius:13px;background:var(--navy-soft);color:var(--muted);font-size:12.5px}
+  .guide strong{flex:none;color:var(--navy);font-size:13px}
+  .guide ol{display:flex;gap:16px;margin:0;padding:0;list-style:none;flex-wrap:wrap}
+  .guide li{display:flex;align-items:center;gap:6px}
+  .guide .n{width:20px;height:20px;display:grid;place-items:center;border-radius:50%;background:var(--navy);color:#fff;font:700 10px/1 "IBM Plex Mono",monospace}
+  :root[data-theme="dark"] .guide .n{color:#10203B}
 
-  /* 죄목 */
-  .cat{background:var(--surface);border:1px solid var(--line);border-radius:13px;
-       box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
-  .cat.hide{display:none}
-  .cat > h2{margin:0;padding:11px 16px;font-size:13px;font-weight:700;letter-spacing:.02em;
-            background:var(--raised);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:center}
-  .cat > h2 .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;
-                 border:1px solid var(--line);color:var(--muted);background:var(--surface)}
-  .cat > h2 .tag.jail{border-color:var(--bad);color:var(--bad)}
-  .cat > h2 .tag.field{border-color:var(--ok);color:var(--ok)}
-  .cat > h2 .tag.story{border-color:var(--accent);color:var(--accent)}
-  .crimes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:var(--line)}
-  .crime{background:var(--surface);border:0;border-radius:0;padding:11px 14px;text-align:left;
-         display:flex;flex-direction:column;gap:3px}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items:start}
+  .pane-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 2px 11px}
+  .pane-head .kicker{color:var(--accent);font-size:10.5px;font-weight:700;letter-spacing:.11em}
+  .pane-head h2{margin:2px 0 0;font-size:22px;letter-spacing:-.02em}
+  .pane-head p{margin:0;color:var(--muted);font-size:12.5px;text-align:right}
+
+  .law-list{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--surface);box-shadow:var(--shadow)}
+  .law-list.no-results{display:none}
+  .law-cols{display:grid;grid-template-columns:minmax(0,1fr) 135px;padding:7px 44px 7px 16px;border-bottom:1px solid var(--line);background:var(--raised);color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.08em}
+  .law-cols span:last-child{text-align:right}
+  .grouped-crimes{background:var(--bg)}
+  .law-group{background:var(--surface)}
+  .law-group+.law-group{border-top:7px solid var(--bg)}
+  .law-group.hide{display:none}
+  .law-group h3{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:8px 15px;border-bottom:1px solid var(--line);background:var(--navy-soft);color:var(--navy);font-size:12.5px;letter-spacing:.01em}
+  .law-group h3 span{color:var(--muted);font-size:10.5px;font-weight:500}
+  .group-crimes{display:grid;grid-template-columns:1fr;background:var(--line);gap:1px}
+  .crime{min-height:48px;padding:10px 14px 10px 16px;border:0;border-radius:0;background:var(--surface);display:grid;grid-template-columns:minmax(0,1fr) auto 20px;align-items:center;gap:12px;text-align:left}
   .crime.hide{display:none}
   .crime:hover{background:var(--raised)}
-  .crime[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
-  .crime .nm{font-size:14.5px;font-weight:600}
-  .crime .vals{font-size:12.5px;color:var(--muted)}
-  .crime .vals b{color:var(--ink);font-weight:600}
-  .crime .vals .j{color:var(--bad)}
-  .crime .d{font-size:11.5px;color:var(--muted);opacity:.8;line-height:1.35}
+  .crime[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 4px 0 0 var(--accent)}
+  .crime .nm{min-width:0;font-size:13.5px;font-weight:600}
+  .crime .fine{color:var(--accent);font:600 12.5px/1.3 "IBM Plex Mono",monospace;white-space:nowrap}
+  .crime .check{width:19px;height:19px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;color:transparent;font-size:11px}
+  .crime[aria-pressed="true"] .check{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+  .no-search{display:none;padding:50px 20px;text-align:center;border:1px dashed #B8C4D4;border-radius:15px;background:var(--surface);color:var(--muted)}
+  .no-search.on{display:block}
 
-  /* 오른쪽 계산 */
-  .side{position:sticky;top:74px;display:flex;flex-direction:column;gap:14px}
-  @media (max-width:1000px){.side{position:static}}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
-        box-shadow:var(--shadow);overflow:hidden}
-  .card > h2{margin:0;padding:12px 16px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
-             color:var(--muted);border-bottom:1px solid var(--line);background:var(--raised);
-             display:flex;align-items:center;gap:8px}
-  .card > h2 .n{margin-left:auto;font-size:12px;color:var(--muted);letter-spacing:0;text-transform:none}
+  .side{display:flex;flex-direction:column;gap:12px;min-width:0}
+  .card{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--surface);box-shadow:var(--shadow)}
+  .card>h2{display:flex;align-items:center;gap:8px;margin:0;padding:13px 15px;border-bottom:1px solid var(--line);background:var(--raised);font-size:14px}
+  .step{width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:#fff;font:700 10px/1 "IBM Plex Mono",monospace}
+  .card>h2 .n{margin-left:auto;color:var(--muted);font-size:11.5px;font-weight:500}
+  .card-help{margin:0;padding:11px 15px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;background:var(--surface)}
+  .empty{padding:24px 16px;text-align:center;color:var(--muted);font-size:13px}
+  .pickrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:9px;padding:10px 14px;border-top:1px solid var(--line)}
+  .pickrow:first-child{border-top:0}.pickrow.over{background:var(--bad-soft)}
+  .pickrow .nm{font-size:13.5px;font-weight:600}.pickrow .v{color:var(--muted);font-size:11.5px;white-space:nowrap}
+  .pickrow .x{padding:4px 8px;color:var(--muted);font-size:11px}.pickrow .x:hover{border-color:var(--bad);color:var(--bad)}
+  .note,.warn{display:none;margin:0;padding:11px 14px;border-top:1px solid;font-size:12px;font-weight:600;line-height:1.5}
+  .note.on{display:block;background:var(--accent-soft);border-color:#BDD0EE;color:var(--accent)}
+  .warn.on{display:block;background:var(--bad-soft);border-color:#EAB8BD;color:var(--bad)}
+  .warn button{margin-top:8px;padding:6px 10px;border-color:var(--bad);background:transparent;color:var(--bad);font-size:11.5px;font-weight:700}
 
-  .pickrow{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line)}
-  .pickrow:first-child{border-top:0}
-  .pickrow.over{background:var(--bad-soft)}
-  .pickrow .nm{flex:1;font-size:14px}
-  .pickrow .v{font-size:13px;color:var(--muted);white-space:nowrap}
-  .pickrow .v b{color:var(--ink)}
-  .pickrow .x{padding:3px 8px;font-size:11.5px;color:var(--muted);border-radius:6px}
-  .pickrow .x:hover{color:var(--bad);border-color:var(--bad)}
-  .empty{padding:22px 16px;text-align:center;color:var(--muted);font-size:13.5px}
+  .result{padding:15px}
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .mode-result{padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--raised)}
+  .mode-result.primary{border-color:#B8CDEC;background:var(--accent-soft)}
+  .mode-result .label{color:var(--muted);font-size:11px;font-weight:700}
+  .mode-result .amount{margin:4px 0 2px;color:var(--ink);font-size:23px;font-weight:700;letter-spacing:-.03em}
+  .mode-result.primary .amount{color:var(--accent)}
+  .mode-result .desc{color:var(--muted);font-size:11.5px;line-height:1.45}
+  .breakdown{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:13px 0 0;padding:13px 2px 0;border-top:1px solid var(--line);font-size:13px}
+  .breakdown dt{color:var(--muted)}.breakdown dd{margin:0;text-align:right;font-weight:700}
+  .breakdown dd small{display:block;color:var(--muted);font-weight:400}
 
-  .note{margin:0;padding:11px 14px;background:var(--accent-soft);color:var(--accent);
-        font-size:12.5px;font-weight:600;border-top:1px solid var(--accent);display:none}
-  .note.on{display:block}
-  .warn{margin:0;padding:11px 14px;background:var(--bad-soft);color:var(--bad);
-        font-size:12.5px;font-weight:600;border-top:1px solid var(--bad);display:none}
-  .warn.on{display:block}
-  .warn button{margin-top:8px;padding:6px 11px;font-size:12px;color:var(--bad);border-color:var(--bad);
-               background:transparent;font-weight:700}
+  .people{padding:14px 15px;border-top:1px solid var(--line)}
+  .people-title{margin-bottom:4px;font-size:13px;font-weight:700}.people-help{margin:0 0 10px;color:var(--muted);font-size:11.5px}
+  .padd{display:flex;gap:5px;margin-bottom:9px}.padd button{flex:1;padding:7px 5px;color:var(--muted);font-size:12px;font-weight:600}.padd button:hover{border-color:var(--accent);color:var(--accent)}
+  .prow{display:flex;align-items:center;gap:8px}.prow label{color:var(--muted);font-size:12px}.prow input{width:78px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:var(--raised);color:var(--ink);text-align:center}.punit{color:var(--muted);font-size:12px}
+  .ptotal{display:none;margin-top:11px;padding:12px;border:1px solid #B8CDEC;border-radius:11px;background:var(--accent-soft)}
+  .ptotal.on{display:block}.ptotal .lb{color:var(--accent);font-size:11px;font-weight:700}.ptotal .v{margin:2px 0;color:var(--accent);font-size:24px;font-weight:700}.ptotal .m{color:var(--muted);font-size:11.5px}
 
-  .calcbody{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-  .seg{display:flex;gap:6px}
-  .seg button{flex:1;padding:9px;font-size:13.5px;color:var(--muted)}
-  .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
-    color:var(--accent-ink);font-weight:700}
-  .fld{display:flex;align-items:center;gap:10px}
-  .fld label{font-size:13px;color:var(--muted);flex:1}
-  .fld input{width:130px;padding:8px 11px;font-size:15px;text-align:right;
-    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
-    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
+  .mixcard[hidden]{display:none}.mixlb{padding:10px 14px 5px;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.11em}
+  .mixgrp{display:flex;align-items:flex-start;gap:9px;padding:10px 14px;border-top:1px solid var(--line)}
+  .mixgrp .rn{flex:none;min-width:67px;padding-top:3px;color:var(--muted);font-size:11px;font-weight:700}.mixgrp .rep{display:block;color:var(--ok);font-size:10px}
+  .mixgrp .cs{flex:1;display:flex;flex-wrap:wrap;gap:4px}.cz{padding:4px 8px;border:1px solid #ABD8C5;border-radius:7px;background:var(--ok-soft);color:var(--ok);font-size:12px;font-weight:700}
+  .mixgrp .amt{flex:none;padding-top:4px;color:var(--muted);font-size:11px;white-space:nowrap}
+  .mixsum{display:flex;gap:8px;padding:10px 14px;border-top:1px solid #ABD8C5;background:var(--ok-soft);color:var(--ok);font-size:12px;font-weight:700}.mixsum .v{margin-left:auto}
 
-  .out{padding:18px 16px;background:var(--raised)}
-  .split2{margin:14px 0 0;padding:14px 0 0;border-top:1px solid var(--line);
-          display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:15px}
-  .split2 dt{color:var(--muted);font-weight:600}
-  .split2 dt::after{content:' -'}
-  .split2 dd{margin:0;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
-             font-weight:600;text-align:right}
-  .split2 dd .m{display:block;font-family:inherit;font-weight:400;font-size:11.5px;color:var(--muted)}
+  .sayrow{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:start;gap:9px;padding:11px 14px;border-top:1px solid var(--line)}
+  .sayrow:first-child{border-top:0}.sayrow .no{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:#fff;font:700 11px/1 "IBM Plex Mono",monospace}
+  .sayrow .t{padding-top:1px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.55;word-break:break-word}
+  .copy{padding:6px 9px;background:var(--accent);border-color:var(--accent);color:#fff;font-size:11.5px;font-weight:700}.copy.done{background:var(--ok);border-color:var(--ok)}.copy.fail{background:transparent;border-color:var(--bad);color:var(--bad)}
+  .foot{max-width:1240px;margin:0 auto;padding:0 20px 36px;color:var(--muted);font-size:11.5px;text-align:center}
 
-  /* 대표 납부 */
-  .people{border-top:1px solid var(--line);padding:14px 16px;background:var(--surface)}
-  .prow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .prow label{font-size:13px;color:var(--muted);font-weight:600}
-  .padd{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-  .padd button{flex:1;min-width:62px;padding:7px 6px;font-size:13px;font-weight:600;color:var(--muted)}
-  .padd button:hover{color:var(--accent);border-color:var(--accent)}
-  .padd button.rst{flex:none;min-width:auto;padding:7px 11px;font-size:12px}
-  .phint{font-size:11.5px;color:var(--muted);margin-left:auto}
-  .punit{font-size:13px;color:var(--muted)}
-  .prow input{width:82px;padding:7px 10px;font-size:15px;text-align:center;
-    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
-    background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:9px}
-  .ptotal{margin-top:11px;padding:12px 14px;border-radius:11px;background:var(--accent-soft);
-          border:1px solid var(--accent);display:none}
-  .ptotal.on{display:block}
-  .ptotal .lb{font-size:11.5px;letter-spacing:.06em;color:var(--accent);font-weight:700}
-  .ptotal .v{font-size:25px;font-weight:700;letter-spacing:-.02em;color:var(--accent);
-             font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;margin-top:2px}
-  .ptotal .m{font-size:12.5px;color:var(--muted);margin-top:4px}
-  .psplit{margin-top:12px;padding-top:12px;border-top:1px solid var(--accent);
-          grid-template-columns:auto 1fr;font-size:14px}
-  .psplit dt{color:var(--muted)}
-  .psplit dd{color:var(--ink)}
-  .psplit dd .m{font-size:11px;margin-top:1px}
-  .big{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
-  .big .v{font-size:32px;font-weight:700;letter-spacing:-.02em;color:var(--accent)}
-  .big .u{font-size:15px;color:var(--muted)}
-  .sub{font-size:13px;color:var(--muted);line-height:1.6}
-  .sub b{color:var(--ink)}
-  .capped{color:var(--bad);font-weight:600}
-
-  /* 금액 맞추기 */
-  .mixcard h2 .n{color:var(--ok);border-color:var(--ok)}
-  .mixlb{padding:12px 14px 5px;font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:700}
-  .mixgrp{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
-  .mixgrp .rn{flex:none;min-width:74px;font-size:12px;color:var(--muted);font-weight:700;padding-top:3px}
-  .mixgrp .rn .rep{display:block;font-size:10.5px;color:var(--ok);font-weight:700;margin-top:2px}
-  .mixgrp .cs{flex:1;display:flex;flex-wrap:wrap;gap:5px}
-  .cz{display:inline-block;padding:4px 9px;border-radius:7px;font-size:13.5px;font-weight:700;
-      background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok)}
-  .mixgrp .amt{flex:none;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
-               font-size:12.5px;color:var(--muted);white-space:nowrap;padding-top:5px}
-  .mixsum{display:flex;gap:10px;padding:11px 14px;border-top:1px solid var(--ok);
-          background:var(--ok-soft);color:var(--ok);font-size:13.5px;font-weight:700}
-  .mixsum .v{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
-
-  .say{border-top:1px solid var(--line)}
-  .sayrow{display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
-  .sayrow:first-child{border-top:0}
-  .sayrow .t{flex:1;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;word-break:break-word}
-  .sayrow{align-items:flex-start}
-  .sayrow .no{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
-              background:var(--accent);color:var(--accent-ink);font-size:12.5px;font-weight:700;margin-top:1px}
-  .sayrow .t{font-size:14px;line-height:1.6}
-
-  .foot{max-width:1220px;margin:0 auto;padding:0 20px 40px;font-size:12px;color:var(--muted);text-align:center}
-  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+  @media(max-width:1040px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;align-items:start}.side .card:first-child,.side .card:nth-child(2){grid-column:auto}.side .card:nth-child(n+3){grid-column:1/-1}}
+  @media(max-width:720px){.topin{padding:9px 12px}.brand{min-width:auto}.brand .k{display:none}.brand h1{font-size:15px}.search{order:3;width:100%;margin-left:0}.search input{width:100%}.search-count{display:none}.theme-switch{margin-left:auto}.page{padding:13px 12px 48px}.guide{align-items:flex-start;flex-direction:column;gap:7px}.guide ol{gap:8px}.layout{display:block}.pane-head{align-items:flex-start;flex-direction:column}.pane-head p{text-align:left}.law-cols{grid-template-columns:minmax(0,1fr) 110px;padding-right:43px}.crime{grid-template-columns:minmax(0,1fr) auto 20px;gap:8px}.side{display:flex;margin-top:14px}.result-grid{grid-template-columns:1fr}.pickrow{grid-template-columns:minmax(0,1fr) auto}.pickrow .v{grid-column:1/2}.pickrow .x{grid-column:2/3;grid-row:1/3}.sayrow{grid-template-columns:24px minmax(0,1fr)}.sayrow .copy{grid-column:2/3;width:100%}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="topin">
-    <div class="brand">
-      <span class="k">GTA FIVEM · 시그널 서버</span>
-      <h1>벌금 · 구금 계산기</h1>
+    <div class="brand"><span class="k">GTA FIVEM · 시그널 서버</span><h1>벌금 · 구금 계산기</h1></div>
+    <div class="search" id="searchWrap">
+      <span class="ic" aria-hidden="true">⌕</span>
+      <label for="q" style="position:absolute;left:-9999px">죄목 검색</label>
+      <input type="search" id="q" placeholder="죄목 이름 검색" autocomplete="off">
+      <button type="button" class="clear" id="clearSearch" aria-label="검색어 지우기">×</button>
     </div>
-    <div class="search">
-      <span class="ic">⌕</span>
-      <input type="search" id="q" placeholder="죄목 검색" autocomplete="off">
+    <span class="search-count" id="searchCount"></span>
+    <button type="button" class="reset" id="reset">선택 초기화</button>
+    <div class="theme-switch" role="group" aria-label="화면 모드">
+      <button type="button" id="themeLight" aria-pressed="true">라이트</button>
+      <button type="button" id="themeDark" aria-pressed="false">다크</button>
     </div>
-    <button class="btn ghost" id="reset">전체 지우기</button>
   </div>
 </header>
 
 <div class="page">
-  <main id="cats"></main>
-
-  <aside class="side">
-    <section class="card">
-      <h2>선택한 죄목 <span class="n" id="pickCount">0개</span></h2>
-      <div id="picks"><div class="empty">죄목을 선택하세요 (최대 4개)</div></div>
-      <div class="note" id="note"></div>
-      <div class="warn" id="warn"></div>
-    </section>
-
-    <section class="card">
-      <h2>부과 금액 <span class="n">보석금 사용 기준</span></h2>
-      <div class="out">
-        <div class="big"><span class="v mono" id="outMain">—</span></div>
-        <dl class="split2" id="outSplit"></dl>
-        <div class="sub" id="outSub"></div>
+  <div class="layout">
+    <main class="law-pane">
+      <div class="pane-head">
+        <h2>구금 범죄 선택</h2>
+        <p>전체 27개 · 최대 4개 자동 적용</p>
       </div>
+      <div id="cats" class="law-list"></div>
+      <div class="no-search" id="noSearch">검색어와 일치하는 죄목이 없습니다.</div>
+    </main>
 
-      <div class="people" id="peopleWrap">
-        <div class="padd" id="padd"></div>
-        <div class="prow">
-          <label for="people">인원수</label>
-          <span class="phint">최대 50명 · 대표가 몰아서 낼 때</span>
-          <input type="number" id="people" value="0" min="0" max="50" step="1" inputmode="numeric">
-          <span class="punit">명</span>
+    <aside class="side">
+      <section class="card">
+        <h2><span class="step">1</span>선택한 죄목 <span class="n" id="pickCount">0개</span></h2>
+        <p class="card-help">계산에 포함되는 죄목과 제외되는 초과 죄목을 확인하세요.</p>
+        <div id="picks"><div class="empty">왼쪽 목록에서 죄목을 선택하세요.<br>한 번에 최대 4개까지 계산됩니다.</div></div>
+        <div class="note" id="note"></div>
+        <div class="warn" id="warn"></div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">2</span>1인 기준 계산 결과 <span class="n">자동 계산</span></h2>
+        <p class="card-help">보석금을 사용할 때와 사용하지 않을 때의 처리 결과를 함께 보여줍니다.</p>
+        <div class="result">
+          <div class="result-grid">
+            <div class="mode-result primary">
+              <div class="label">보석금 사용</div>
+              <div class="amount mono" id="bailTotal">—</div>
+              <div class="desc" id="bailDesc">죄목을 선택하면 총액이 표시됩니다.</div>
+            </div>
+            <div class="mode-result">
+              <div class="label">보석금 미사용</div>
+              <div class="amount mono" id="noBailFine">—</div>
+              <div class="desc" id="noBailDesc">벌금과 구금 시간이 표시됩니다.</div>
+            </div>
+          </div>
+          <dl class="breakdown" id="breakdown"></dl>
         </div>
-        <div class="ptotal" id="ptotal"></div>
-      </div>
-    </section>
+        <div class="people">
+          <div class="people-title">여러 명의 보석금을 대표가 납부하는 경우</div>
+          <p class="people-help">같은 금액을 적용받는 인원수를 입력하면 전체 납부액을 계산합니다.</p>
+          <div class="padd" id="padd"></div>
+          <div class="prow"><label for="people">인원수</label><input type="number" id="people" value="0" min="0" max="50" step="1" inputmode="numeric"><span class="punit">명</span></div>
+          <div class="ptotal" id="ptotal"></div>
+        </div>
+      </section>
 
-    <section class="card mixcard" id="mixCard" hidden>
-      <h2>금액 맞추기 <span class="n" id="mixN"></span></h2>
-      <div class="mixlb">부과하기</div>
-      <div id="mix"></div>
-      <div class="mixsum" id="mixSum"></div>
-    </section>
+      <section class="card mixcard" id="mixCard" hidden>
+        <h2><span class="step">3</span>부과 금액 맞추기 <span class="n" id="mixN"></span></h2>
+        <p class="card-help">부과 UI에서 목표 금액과 같게 만들 수 있는 죄목 조합을 회차별로 표시합니다.</p>
+        <div class="mixlb">회차별 부과 조합</div>
+        <div id="mix"></div>
+        <div class="mixsum" id="mixSum"></div>
+      </section>
 
-    <section class="card">
-      <h2>구두 고지 순서</h2>
-      <div class="say" id="say"></div>
-    </section>
-  </aside>
+      <section class="card">
+        <h2><span class="step">4</span>구두 고지 순서</h2>
+        <p class="card-help">위에서 아래 순서대로 읽으세요. 필요한 문구는 오른쪽 버튼으로 복사할 수 있습니다.</p>
+        <div id="say"><div class="empty">죄목을 선택하면 구두 고지 문구가 만들어집니다.</div></div>
+      </section>
+    </aside>
+  </div>
 </div>
 
-<p class="foot">한 번에 부과할 수 있는 범죄는 최대 4개 · 구금 1분 = 100만원 · 최대 구금 120분</p>
+<p class="foot">한 번에 부과할 수 있는 범죄는 최대 4개 · 구금 1분 = 100만원 · 최대 구금 시간 120분</p>
 
 <script>
 var LAWS = [
   { cat:'중대범죄', items:[
-    { n:'재물손괴',    f:1000, m:10, d:'타인의 물건 · 차량을 부숨' },
-    { n:'폭행죄',      f:1500, m:10, d:'때렸으나 다치지 않음' },
-    { n:'도주',        f:2000, m:10, d:'PM 정차 명령 · 사유지 3회 이탈 명령 불응' },
+    { n:'재물손괴',    f:1000, m:10 },
+    { n:'폭행죄',      f:1500, m:10 },
+    { n:'도주',        f:2000, m:10 },
     { n:'성희롱',      f:2000, m:10 },
-    { n:'도박개장',    f:1500, m:15, d:'금액 + 룰렛/가위바위보 명시한 건만' },
+    { n:'도박개장',    f:1500, m:15 },
     { n:'차량절도',    f:2000, m:15 },
-    { n:'과실치상죄',  f:2500, m:15, d:'죽일 의도 없이 다치게 함 — 피해자 생존' },
-    { n:'과실치사죄',  f:3500, m:20, d:'죽일 의도 없이 죽게 함 — 피해자 사망' }
+    { n:'과실치상죄',  f:2500, m:15 },
+    { n:'과실치사죄',  f:3500, m:20 }
   ]},
   { cat:'특수범죄', items:[
     { n:'불법무기 소지 및 광고', f:2000, m:15 },
@@ -277,429 +240,476 @@ var LAWS = [
     { n:'마약류 소지죄',         f:1500, m:15 },
     { n:'마약류 판매',           f:2000, m:15 },
     { n:'납치 및 유괴',          f:2500, m:20 },
-    { n:'살인',                  f:5000, m:30, d:'죽일 의도로 죽게 함 — 고의' }
+    { n:'살인',                  f:5000, m:30 }
   ]},
   { cat:'공무원 관련법', items:[
     { n:'공무원 명예훼손',        f:1500, m:10 },
-    { n:'공무원 사칭',            f:2000, m:10, d:'경찰이 아님에도 경찰 업무 진행' },
+    { n:'공무원 사칭',            f:2000, m:10 },
     { n:'공무집행 방해죄',        f:2000, m:10 },
     { n:'공무원 폭행',            f:2000, m:15 },
     { n:'공무원 살인',            f:5000, m:30 },
     { n:'공무원 뇌물공여 & 수수', f:9000, m:30 }
   ]},
   { cat:'스토리 RP', story:true, items:[
-    { n:'ATM RP',       f:3000,  m:10 },
     { n:'편의점 RP',    f:5000,  m:15 },
+    { n:'ATM RP',       f:3000,  m:10 },
+    { n:'영장 RP',      f:30000, m:30, pub:true },
+    { n:'차량 영장 RP', f:30000, m:30, pub:true },
     { n:'보석상 RP',    f:5000,  m:20 },
     { n:'카지노 RP',    f:10000, m:30 },
-    { n:'중앙은행 RP',  f:15000, m:30 },
-    { n:'영장 RP',      f:30000, m:30, pub:true },
-    { n:'차량 영장 RP', f:30000, m:30, pub:true }
+    { n:'중앙은행 RP',  f:15000, m:30 }
   ]}
 ];
 
-/* 금액 맞추기 — 금액별 사용 가능한 죄목 (한 부과 창에서 같은 죄목은 1회만 · 공금 · 700만원 단위 제외) */
 var TIER = [
   { f:15000, names:['중앙은행 RP'] },
   { f:10000, names:['카지노 RP'] },
   { f:9000,  names:['공무원 뇌물공여 & 수수'] },
   { f:5000,  names:['편의점 RP','보석상 RP','살인','공무원 살인'] },
   { f:3500,  names:['과실치사죄'] },
-  { f:3000,  names:['ATM RP','미허가 비행','저공비행'] },
+  { f:3000,  names:['ATM RP'] },
   { f:2500,  names:['과실치상죄','불법무기 판매 및 구매','납치 및 유괴'] },
   { f:2000,  names:['도주','차량절도','공무집행 방해죄','성희롱','공무원 사칭','공무원 폭행','불법무기 소지 및 광고','마약류 판매'] },
   { f:1500,  names:['폭행죄','도박개장','공무원 명예훼손','마약류 소지죄'] },
-  { f:1000,  names:['모욕','재물손괴','명예훼손','업무방해죄','공갈협박','공연음란'] },
-  { f:500,   names:['소음공해','주정차위반'] }
+  { f:1000,  names:['재물손괴'] }
 ];
-</script>
-<script>
-var MAXCRIMES = 4, PERMIN = 100, MAXMIN = 120;
-var picked = [], people = 0;
 
-function $(id){ return document.getElementById(id); }
-function el(t, c, x){ var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
-function won(n){
-  if (n >= 10000){
-    var e = Math.floor(n / 10000), rest = n % 10000;
-    return e + '억' + (rest ? ' ' + rest.toLocaleString() + '만원' : '');
+var MAXCRIMES = 4;
+var PERMIN = 100;
+var MAXMIN = 120;
+var UNIT = 100;
+var MAXPER = 4;
+var picked = [];
+var people = 0;
+var flat = [];
+
+LAWS.forEach(function(group, groupIndex){
+  group.items.forEach(function(item, itemIndex){
+    item.cat = group.cat;
+    item.story = !!group.story;
+    item.key = groupIndex + '-' + itemIndex;
+    item.order = flat.length;
+    flat.push(item);
+  });
+});
+
+function won(value){
+  var number = Number(value || 0);
+  if(number >= 10000){
+    var billions = Math.floor(number / 10000);
+    var rest = number % 10000;
+    return billions + '억' + (rest ? ' ' + rest.toLocaleString('ko-KR') + '만원' : '원');
   }
-  return n.toLocaleString() + '만원';
+  return number.toLocaleString('ko-KR') + '만원';
 }
-function wonOf(it){ return (it.pub ? '공금 ' : '') + won(it.f); }
 
-/* ── 죄목 목록 ── */
-function buildCats(){
-  var host = $('cats');
-  LAWS.forEach(function(cat){
-    var box = el('section', 'cat');
-    box.dataset.cat = cat.cat;
-    var h = el('h2', null, cat.cat);
-    h.appendChild(el('span', 'tag ' + (cat.story ? 'story' : 'jail'),
-      cat.story ? '현장 처리 · 다른 죄목 묻지 않음' : '구금 있음 · 유치장'));
-    box.appendChild(h);
+function wonOf(item){
+  return (item.pub ? '공금 ' : '') + won(item.f);
+}
 
-    var grid = el('div', 'crimes');
-    cat.items.forEach(function(it){
-      it.story = !!cat.story;
-      var b = el('button', 'crime');
-      b.dataset.name = it.n;
-      b.setAttribute('aria-pressed', 'false');
-      b.appendChild(el('span', 'nm', it.n));
-      var v = el('span', 'vals');
-      v.appendChild(el('b', null, wonOf(it)));
-      if (it.m > 0){
-        v.appendChild(document.createTextNode(' · '));
-        var j = el('span', 'j', '구금 ' + it.m + '분');
-        v.appendChild(j);
-      } else {
-        v.appendChild(document.createTextNode(' · 구금 없음'));
-      }
-      b.appendChild(v);
-      if (it.d) b.appendChild(el('span', 'd', it.d));
-      b.addEventListener('click', function(){ toggle(it); });
-      grid.appendChild(b);
-    });
-    box.appendChild(grid);
-    host.appendChild(box);
+function escapeHtml(value){
+  return String(value).replace(/[&<>\"']/g, function(char){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[char];
   });
 }
 
-function toggle(it){
-  var i = picked.findIndex(function(p){ return p.n === it.n; });
-  if (i >= 0) picked.splice(i, 1); else picked.push(it);
-  render();
-}
-
-/* ── 계산 ── */
 function effective(){
-  /* 벌금 · 구금이 높은 순으로 4개까지만 부과 */
-  var sorted = picked.slice().sort(function(a, b){
-    return (b.f + b.m * PERMIN) - (a.f + a.m * PERMIN);
-  });
-  return sorted.slice(0, MAXCRIMES);
+  return picked.slice().sort(function(a, b){
+    return (b.f + b.m * PERMIN) - (a.f + a.m * PERMIN) || a.order - b.order;
+  }).slice(0, MAXCRIMES);
 }
 
 function calc(){
-  var use = effective();
-  var fine = use.reduce(function(s, x){ return s + x.f; }, 0);
-  var mins = use.reduce(function(s, x){ return s + x.m; }, 0);
+  var charges = effective();
+  var fine = charges.reduce(function(sum, item){ return sum + item.f; }, 0);
+  var mins = charges.reduce(function(sum, item){ return sum + item.m; }, 0);
   var bail = mins * PERMIN;
   var total = fine + bail;
-  return { use:use, fine:fine, mins:mins, bail:bail, total:total,
-           people:people, allFine:fine * people, allBail:bail * people, allTotal:total * people };
+  return {
+    charges:charges,
+    fine:fine,
+    mins:mins,
+    bail:bail,
+    total:total,
+    allFine:fine * people,
+    allBail:bail * people,
+    allTotal:total * people
+  };
 }
 
-/* ── 그리기 ── */
-function render(){
-  document.querySelectorAll('.crime').forEach(function(b){
-    b.setAttribute('aria-pressed', picked.some(function(p){ return p.n === b.dataset.name; }) ? 'true' : 'false');
+function renderLaws(){
+  var cats = document.getElementById('cats');
+  cats.innerHTML = '<div class="law-cols"><span>죄명</span><span>금액</span></div>' +
+    '<div class="grouped-crimes">' + LAWS.map(function(group){
+      return '<section class="law-group" data-group="' + escapeHtml(group.cat) + '">' +
+        '<h3>' + escapeHtml(group.cat) + '<span>' + group.items.length + '개 죄목</span></h3>' +
+        '<div class="group-crimes">' + group.items.map(function(item){
+          return '<button type="button" class="crime" data-key="' + item.key + '" aria-pressed="false"' +
+            ' data-search="' + escapeHtml(item.n.toLowerCase()) + '">' +
+            '<span class="nm">' + escapeHtml(item.n) + '</span>' +
+            '<span class="fine">' + wonOf(item) + '</span>' +
+            '<span class="check" aria-hidden="true">✓</span>' +
+          '</button>';
+        }).join('') + '</div></section>';
+    }).join('') + '</div>';
+
+  cats.addEventListener('click', function(event){
+    var button = event.target.closest('.crime');
+    if(!button) return;
+    toggleCrime(button.getAttribute('data-key'));
+  });
+}
+
+function toggleCrime(key){
+  var item = flat.find(function(candidate){ return candidate.key === key; });
+  if(!item) return;
+  var index = picked.indexOf(item);
+  if(index === -1) picked.push(item);
+  else picked.splice(index, 1);
+  update();
+}
+
+function removeCrime(key){
+  picked = picked.filter(function(item){ return item.key !== key; });
+  update();
+}
+
+function renderPicks(){
+  var applied = effective();
+  var appliedKeys = applied.map(function(item){ return item.key; });
+  var ordered = applied.concat(picked.filter(function(item){ return appliedKeys.indexOf(item.key) === -1; }));
+  var picksEl = document.getElementById('picks');
+  document.getElementById('pickCount').textContent = picked.length + '개 선택 · ' + applied.length + '개 적용';
+
+  if(!ordered.length){
+    picksEl.innerHTML = '<div class="empty">왼쪽 목록에서 죄목을 선택하세요.<br>한 번에 최대 4개까지 계산됩니다.</div>';
+  }else{
+    picksEl.innerHTML = ordered.map(function(item){
+      var excluded = appliedKeys.indexOf(item.key) === -1;
+      return '<div class="pickrow' + (excluded ? ' over' : '') + '">' +
+        '<span class="nm">' + escapeHtml(item.n) + (excluded ? ' <small>· 계산 제외</small>' : '') + '</span>' +
+        '<span class="v mono">' + wonOf(item) + ' · ' + (item.m ? item.m + '분' : '구금 없음') + '</span>' +
+        '<button type="button" class="x" data-remove="' + item.key + '" aria-label="' + escapeHtml(item.n) + ' 선택 해제">해제</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  picksEl.querySelectorAll('[data-remove]').forEach(function(button){
+    button.addEventListener('click', function(){ removeCrime(button.getAttribute('data-remove')); });
   });
 
-  var use = effective();
-  var box = $('picks');
-  box.innerHTML = '';
-  $('pickCount').textContent = picked.length + '개';
+  var selectedKeys = picked.map(function(item){ return item.key; });
+  document.querySelectorAll('.crime').forEach(function(button){
+    button.setAttribute('aria-pressed', selectedKeys.indexOf(button.getAttribute('data-key')) !== -1 ? 'true' : 'false');
+  });
 
-  if (!picked.length){
-    box.appendChild(el('div', 'empty', '죄목을 선택하세요 (최대 4개)'));
-  } else {
-    picked.forEach(function(p){
-      var over = use.indexOf(p) < 0;
-      var row = el('div', 'pickrow' + (over ? ' over' : ''));
-      row.appendChild(el('span', 'nm', p.n + (over ? '  (제외됨)' : '')));
-      var v = el('span', 'v');
-      v.appendChild(el('b', null, wonOf(p)));
-      v.appendChild(document.createTextNode(p.m ? ' · ' + p.m + '분' : ' · 구금 없음'));
-      row.appendChild(v);
-      var x = el('button', 'x', '빼기');
-      x.addEventListener('click', function(){ toggle(p); });
-      row.appendChild(x);
-      box.appendChild(row);
-    });
+  var storyItems = picked.filter(function(item){ return item.story; });
+  var note = document.getElementById('note');
+  if(storyItems.length){
+    var hasWarrant = storyItems.some(function(item){ return /영장/.test(item.n); });
+    note.textContent = hasWarrant
+      ? '영장 RP는 스토리 RP 중 유일하게 다른 죄목을 함께 물을 수 있습니다.'
+      : '스토리 RP는 현장에서 처리하고 다른 범죄의 죄목을 묻지 않습니다. 단, 영장 RP는 예외입니다.';
+    note.classList.add('on');
+  }else{
+    note.textContent = '';
+    note.classList.remove('on');
   }
 
-  var storyPicked = picked.filter(function(p){ return p.story; });
-  var note = $('note');
-  if (storyPicked.length){
-    note.className = 'note on';
-    note.textContent = storyPicked.some(function(p){ return /영장/.test(p.n); })
-      ? '영장 RP는 스토리RP 중 유일하게 다른 죄목을 함께 물을 수 있습니다.'
-      : '스토리RP는 현장에서 처리하고 다른 범죄 죄목을 묻지 않습니다. (영장 RP 제외)';
-  } else note.className = 'note';
-
-  var w = $('warn');
-  if (picked.length > MAXCRIMES){
-    w.className = 'warn on';
-    w.innerHTML = '';
-    w.appendChild(document.createTextNode(
-      '한 번에 부과할 수 있는 범죄는 최대 ' + MAXCRIMES + '개입니다. 벌금 · 구금이 높은 순으로 ' +
-      MAXCRIMES + '개만 계산했습니다.'));
-    var fix = el('button', null, '초과분 빼기');
-    fix.addEventListener('click', function(){ picked = effective(); render(); });
-    w.appendChild(document.createElement('br'));
-    w.appendChild(fix);
-  } else w.className = 'warn';
-
-  var c = calc();
-  var main = $('outMain'), sp = $('outSplit'), sub = $('outSub');
-  sp.innerHTML = '';
-
-  if (!picked.length){
-    main.textContent = '—';
-    sub.textContent = '죄목을 고르면 부과 금액이 나옵니다.';
-  } else {
-    main.textContent = won(c.total);
-
-    var dt1 = el('dt', null, '벌금');
-    var dd1 = el('dd', null, won(c.fine));
-    var dt2 = el('dt', null, '보석금');
-    var dd2 = el('dd', null, won(c.bail));
-    dd2.appendChild(el('span', 'm', '구금 ' + c.mins + '분 × ' + PERMIN + '만원'));
-    [dt1, dd1, dt2, dd2].forEach(function(n){ sp.appendChild(n); });
-
-    sub.textContent = '';
+  var warn = document.getElementById('warn');
+  if(picked.length > MAXCRIMES){
+    warn.innerHTML = '선택한 ' + picked.length + '개 중 벌금·구금이 높은 ' + MAXCRIMES + '개만 계산에 적용됩니다.<br>' +
+      '<button type="button" id="trimPicks">초과분 제외하기</button>';
+    warn.classList.add('on');
+    document.getElementById('trimPicks').addEventListener('click', function(){ picked = effective(); update(); });
+  }else{
+    warn.textContent = '';
+    warn.classList.remove('on');
   }
-
-  /* 대표 납부 */
-  var padd = $('padd');
-  if (!padd.dataset.built){
-    [1, 2, 5, 10].forEach(function(n){
-      var b = el('button', null, '+' + n + '명');
-      b.addEventListener('click', function(){
-        people = Math.min(50, people + n);
-        $('people').value = people;
-        render();
-      });
-      padd.appendChild(b);
-    });
-    var rst = el('button', 'rst', '초기화');
-    rst.title = '인원수를 0명으로 되돌립니다';
-    rst.addEventListener('click', function(){ people = 0; $('people').value = 0; render(); });
-    padd.appendChild(rst);
-    padd.dataset.built = '1';
-  }
-
-  var pt = $('ptotal');
-  if (picked.length && people >= 1){
-    pt.className = 'ptotal on';
-    pt.innerHTML = '';
-    pt.appendChild(el('div', 'lb', people + '명 대표 납부'));
-    pt.appendChild(el('div', 'v', won(c.allTotal)));
-
-    var dl = el('dl', 'split2 psplit');
-    var a1 = el('dt', null, '벌금');
-    var b1 = el('dd', null, won(c.allFine));
-    b1.appendChild(el('span', 'm', won(c.fine) + ' × ' + people + '명'));
-    var a2 = el('dt', null, '보석금');
-    var b2 = el('dd', null, won(c.allBail));
-    b2.appendChild(el('span', 'm', won(c.bail) + ' × ' + people + '명'));
-    [a1, b1, a2, b2].forEach(function(n){ dl.appendChild(n); });
-    pt.appendChild(dl);
-  } else pt.className = 'ptotal';
-
-  renderMix(c);
-  renderSay(c);
 }
 
-/* ── 금액 맞추기 ── */
-var U500 = 500, MAXPER = 4;      /* 한 부과 창 최대 죄목 4개 */
-var ROUNDVAL = null;             /* 한 창에서 만들 수 있는 금액 → 죄목 구성 */
+function renderResult(c){
+  var bailTotal = document.getElementById('bailTotal');
+  var noBailFine = document.getElementById('noBailFine');
+  var breakdown = document.getElementById('breakdown');
+  if(!c.charges.length){
+    bailTotal.textContent = '—';
+    noBailFine.textContent = '—';
+    document.getElementById('bailDesc').textContent = '죄목을 선택하면 총액이 표시됩니다.';
+    document.getElementById('noBailDesc').textContent = '벌금과 구금 시간이 표시됩니다.';
+    breakdown.innerHTML = '<dt>벌금</dt><dd>—</dd><dt>보석금</dt><dd>—</dd><dt>구금 시간</dt><dd>—</dd>';
+  }else{
+    bailTotal.textContent = won(c.total);
+    noBailFine.textContent = won(c.fine);
+    document.getElementById('bailDesc').textContent = c.mins
+      ? '벌금 + 보석금 · 구금 없이 총액만 부과합니다.'
+      : '보석금 없이 벌금만 부과합니다.';
+    document.getElementById('noBailDesc').textContent = !c.mins
+      ? '벌금만 납부 · 구금 없음'
+      : (c.mins > MAXMIN ? '벌금 납부 + 구금 ' + MAXMIN + '분(최대)' : '벌금 납부 + 구금 ' + c.mins + '분');
+    breakdown.innerHTML =
+      '<dt>벌금</dt><dd class="mono">' + won(c.fine) + '</dd>' +
+      '<dt>보석금</dt><dd class="mono">' + won(c.bail) + (c.mins ? '<small>구금 ' + c.mins + '분 × ' + won(PERMIN) + '</small>' : '<small>구금이 없어 보석금도 없습니다.</small>') + '</dd>' +
+      '<dt>구금 시간</dt><dd class="mono">' + (c.mins ? c.mins + '분' : '없음') + (c.mins > MAXMIN ? '<small>실제 최대 적용 ' + MAXMIN + '분</small>' : '') + '</dd>';
+  }
+
+  var ptotal = document.getElementById('ptotal');
+  if(c.charges.length && people > 0){
+    ptotal.innerHTML = '<div class="lb">' + people + '명분 합계</div>' +
+      '<div class="v mono">' + won(c.allTotal) + '</div>' +
+      '<div class="m">벌금 ' + won(c.allFine) + ' + 보석금 ' + won(c.allBail) + '</div>';
+    ptotal.classList.add('on');
+  }else{
+    ptotal.innerHTML = '';
+    ptotal.classList.remove('on');
+  }
+}
+
+function renderPeopleButtons(){
+  document.getElementById('padd').innerHTML = [1,2,5,10].map(function(number){
+    return '<button type="button" data-people-add="' + number + '">+' + number + '명</button>';
+  }).join('') + '<button type="button" data-people-reset="true" title="인원수를 0명으로 되돌립니다">초기화</button>';
+  document.getElementById('padd').addEventListener('click', function(event){
+    var button = event.target.closest('button');
+    if(!button) return;
+    if(button.hasAttribute('data-people-reset')) people = 0;
+    else people = Math.min(50, people + Number(button.getAttribute('data-people-add') || 0));
+    document.getElementById('people').value = people;
+    update();
+  });
+}
+
+function namesFor(counts){
+  var names = [];
+  counts.forEach(function(count, tierIndex){
+    for(var i = 0; i < count; i++) names.push(TIER[tierIndex].names[i]);
+  });
+  return names;
+}
 
 function buildRounds(){
-  if (ROUNDVAL) return ROUNDVAL;
-  var map = {};
-  var comp = [];
-  (function rec(start, val){
-    if (comp.length){
-      var cur = map[val];
-      if (!cur || cur.length > comp.length) map[val] = comp.slice();
+  var byValue = {};
+  function walk(tierIndex, slotsLeft, value, counts, itemCount){
+    if(tierIndex === TIER.length || slotsLeft === 0){
+      if(value > 0){
+        var normalized = counts.slice();
+        for(var rest = tierIndex; rest < normalized.length; rest++) normalized[rest] = 0;
+        var candidate = { value:value, counts:normalized, count:itemCount };
+        if(!byValue[value] || candidate.count < byValue[value].count) byValue[value] = candidate;
+      }
+      return;
     }
-    if (comp.length === MAXPER) return;
-    for (var i = start; i < TIER.length; i++){
-      var used = 0;
-      for (var k = 0; k < comp.length; k++) if (comp[k] === i) used++;
-      if (used >= TIER[i].names.length) continue;
-      comp.push(i);
-      rec(i, val + TIER[i].f / U500);
-      comp.pop();
+    var maxCount = Math.min(TIER[tierIndex].names.length, slotsLeft);
+    for(var count = maxCount; count >= 0; count--){
+      counts[tierIndex] = count;
+      walk(tierIndex + 1, slotsLeft - count, value + TIER[tierIndex].f * count, counts, itemCount + count);
     }
-  })(0, 0);
-  ROUNDVAL = map;
-  return map;
+    counts[tierIndex] = 0;
+  }
+  walk(0, MAXPER, 0, new Array(TIER.length).fill(0), 0);
+  return Object.keys(byValue).map(function(value){
+    var round = byValue[value];
+    round.names = namesFor(round.counts);
+    return round;
+  }).sort(function(a, b){ return b.value - a.value || a.count - b.count; });
 }
 
-var mixCache = {};
-function combo(target){
-  if (!(target > 0)) return null;
-  if (mixCache[target]) return mixCache[target];
-  var t = target / U500;
-  if (t !== Math.floor(t)) return null;
+var ROUND_OPTIONS = buildRounds();
 
-  var map = buildRounds();
-  var coins = Object.keys(map).map(Number).sort(function(x, y){ return y - x; });
-  var INF = 1e9, best = new Array(t + 1), from = new Array(t + 1);
-  best[0] = 0;
-  for (var v = 1; v <= t; v++){
-    best[v] = INF; from[v] = -1;
-    for (var i = 0; i < coins.length; i++){
-      var c = coins[i];
-      if (c > v) continue;
-      if (best[v - c] + 1 < best[v]){ best[v] = best[v - c] + 1; from[v] = c; }
+function combo(target){
+  if(target <= 0 || target % UNIT !== 0) return null;
+  var units = target / UNIT;
+  var dp = new Array(units + 1).fill(Infinity);
+  var prev = new Array(units + 1).fill(null);
+  dp[0] = 0;
+
+  for(var amount = 1; amount <= units; amount++){
+    for(var i = 0; i < ROUND_OPTIONS.length; i++){
+      var option = ROUND_OPTIONS[i];
+      var optionUnits = option.value / UNIT;
+      if(optionUnits <= amount && dp[amount - optionUnits] + 1 < dp[amount]){
+        dp[amount] = dp[amount - optionUnits] + 1;
+        prev[amount] = option;
+      }
     }
   }
-  if (best[t] >= INF) return null;
+  if(!isFinite(dp[units])) return null;
 
-  var seq = [], v2 = t;
-  while (v2 > 0){ var c2 = from[v2]; seq.push(c2); v2 -= c2; }
-  seq.sort(function(x, y){ return y - x; });
-
-  /* 같은 금액 회차끼리 묶기 */
-  var groups = [];
-  seq.forEach(function(v3){
-    var last = groups[groups.length - 1];
-    if (last && last.val === v3) last.n++;
-    else groups.push({ val:v3, n:1, crimes:namesFor(map[v3]) });
-  });
-
-  var r = { groups:groups, rounds:seq.length, target:target };
-  mixCache[target] = r;
-  return r;
-}
-
-function namesFor(comp){
-  var seen = {}, out = [];
-  comp.forEach(function(i){
-    var k = seen[i] || 0; seen[i] = k + 1;
-    out.push({ n:TIER[i].names[k], f:TIER[i].f });
-  });
-  return out;
+  var result = [];
+  var cursor = units;
+  while(cursor > 0){
+    var used = prev[cursor];
+    if(!used) return null;
+    result.push(used);
+    cursor -= used.value / UNIT;
+  }
+  return result;
 }
 
 function renderMix(c){
-  var card = $('mixCard'), host = $('mix');
-  if (!picked.length){ card.hidden = true; return; }
+  var card = document.getElementById('mixCard');
+  var target = people >= 1 ? c.allTotal : c.total;
+  if(!c.charges.length || target <= 0){
+    card.hidden = true;
+    return;
+  }
 
-  var target = (c.people >= 1) ? c.allTotal : c.total;
-  var r = combo(target);
+  var rounds = combo(target);
   card.hidden = false;
-  host.innerHTML = '';
-  $('mixN').textContent = won(target);
-
-  if (!r){
-    host.appendChild(el('div', 'empty', '죄목 조합으로 딱 맞출 수 없는 금액입니다.'));
-    $('mixSum').textContent = '';
+  if(!rounds){
+    document.getElementById('mixN').textContent = '';
+    document.getElementById('mix').innerHTML = '<div class="empty">이 금액과 정확히 일치하는 조합을 찾지 못했습니다.</div>';
+    document.getElementById('mixSum').innerHTML = '<span>목표 금액</span><span class="v mono">' + won(target) + '</span>';
     return;
   }
 
-  var no = 1;
-  r.groups.forEach(function(g){
-    var row = el('div', 'mixgrp');
-    var rn = el('div', 'rn', g.n > 1 ? (no + '–' + (no + g.n - 1) + '회차') : (no + '회차'));
-    if (g.n > 1) rn.appendChild(el('span', 'rep', g.n + '번 반복'));
-    no += g.n;
-    row.appendChild(rn);
-
-    var cs = el('div', 'cs');
-    g.crimes.forEach(function(x){ cs.appendChild(el('span', 'cz', x.n)); });
-    row.appendChild(cs);
-
-    row.appendChild(el('div', 'amt', won(g.val * U500) + (g.n > 1 ? ' / 회' : '')));
-    host.appendChild(row);
+  var groups = [];
+  var groupIndex = {};
+  rounds.forEach(function(round){
+    var key = round.value + '|' + round.names.join('|');
+    if(groupIndex[key] !== undefined) groups[groupIndex[key]].repeat++;
+    else{
+      groupIndex[key] = groups.length;
+      groups.push({ key:key, round:round, repeat:1 });
+    }
   });
 
-  var sum = r.groups.reduce(function(s2, g){ return s2 + g.val * U500 * g.n; }, 0);
-  $('mixSum').innerHTML = '';
-  $('mixSum').appendChild(el('span', null, sum === target ? '합계 (총액 일치)' : '합계 (불일치)'));
-  $('mixSum').appendChild(el('span', 'v', won(sum)));
+  document.getElementById('mixN').textContent = rounds.length + '회 부과';
+  document.getElementById('mix').innerHTML = groups.map(function(group, index){
+    return '<div class="mixgrp">' +
+      '<div class="rn">' + (groups.length === rounds.length ? (index + 1) + '회차' : '부과 조합') +
+        (group.repeat > 1 ? '<span class="rep">× ' + group.repeat + '회</span>' : '') + '</div>' +
+      '<div class="cs">' + group.round.names.map(function(name){ return '<span class="cz">' + escapeHtml(name) + '</span>'; }).join('') + '</div>' +
+      '<div class="amt mono">' + won(group.round.value) + '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('mixSum').innerHTML = '<span>목표 금액과 일치</span><span class="v mono">' + won(target) + '</span>';
 }
 
-/* ── 구두 고지 ── */
+function copyText(text, button){
+  function success(){
+    button.textContent = '복사됨';
+    button.classList.add('done');
+    setTimeout(function(){ button.textContent = '복사'; button.classList.remove('done'); }, 1200);
+  }
+  function fallback(){
+    var area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    try{
+      if(document.execCommand('copy')) success();
+      else throw new Error('copy failed');
+    }catch(error){
+      button.textContent = '복사 실패';
+      button.classList.add('fail');
+      setTimeout(function(){ button.textContent = '복사'; button.classList.remove('fail'); }, 1500);
+    }
+    document.body.removeChild(area);
+  }
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(success).catch(fallback);
+  }else fallback();
+}
+
 function renderSay(c){
-  var host = $('say');
-  host.innerHTML = '';
-  if (!picked.length){
-    host.appendChild(el('div', 'empty', '죄목을 고르면 읽을 순서가 만들어집니다'));
+  var say = document.getElementById('say');
+  if(!c.charges.length){
+    say.innerHTML = '<div class="empty">죄목을 선택하면 구두 고지 문구가 만들어집니다.</div>';
     return;
   }
+  var names = c.charges.map(function(item){ return item.n; }).join(', ');
+  var lines = [
+    names + '에 대해 인정 하십니까?',
+    c.mins ? '벌금 ' + won(c.fine) + '에 구금 ' + c.mins + '분 입니다.' : '벌금 ' + won(c.fine) + ' 입니다.'
+  ];
+  if(c.mins){
+    lines.push('보석금 사용하시나요?');
+    lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
+  }
+  if(people > 1) lines.push(people + '명분 합산하여 총 ' + won(c.allTotal) + ' 입니다.');
 
-  var lines = [];
-  var names = c.use.map(function(x){ return x.n; }).join(', ');
-  lines.push(names + '에 대해 인정 하십니까?');
-  lines.push('벌금 ' + won(c.fine) + '에 구금 ' + c.mins + '분 입니다.');
-  lines.push('보석금 사용하시나요?');
-  lines.push('구금 ' + c.mins + '분이셔서, 보석금 ' + won(c.bail) + ' 입니다.');
-  if (c.people > 1) lines.push(c.people + '명분 합산하여 총 ' + won(c.allTotal) + ' 입니다.');
-
-  lines.forEach(function(t, i){
-    var row = el('div', 'sayrow');
-    row.appendChild(el('span', 'no', String(i + 1)));
-    row.appendChild(el('div', 't', t));
-    host.appendChild(row);
+  say.innerHTML = lines.map(function(line, index){
+    return '<div class="sayrow"><span class="no">' + (index + 1) + '</span><span class="t">' + escapeHtml(line) + '</span>' +
+      '<button type="button" class="copy" data-line="' + index + '">복사</button></div>';
+  }).join('');
+  say.querySelectorAll('[data-line]').forEach(function(button){
+    button.addEventListener('click', function(){ copyText(lines[Number(button.getAttribute('data-line'))], button); });
   });
 }
 
-/* ── 복사 ── */
-function legacyCopy(text){
-  var ta = document.createElement('textarea');
-  ta.value = text; ta.setAttribute('readonly','');
-  ta.style.position = 'fixed'; ta.style.top = '-1000px';
-  document.body.appendChild(ta);
-  ta.select(); ta.setSelectionRange(0, text.length);
-  var ok = false;
-  try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
-  document.body.removeChild(ta);
-  return ok;
-}
-function selectNode(n){
-  try {
-    var r = document.createRange(); r.selectNodeContents(n);
-    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-  } catch(e){}
-}
-function flash(b, cls, label){
-  b.classList.remove('done','fail');
-  if (cls) b.classList.add(cls);
-  b.textContent = label;
-  clearTimeout(b._t);
-  b._t = setTimeout(function(){ b.classList.remove('done','fail'); b.textContent = '복사'; }, 1500);
-}
-function copyText(text, btn, node){
-  function ok(){ flash(btn, 'done', '복사됨'); }
-  function no(){ selectNode(node); flash(btn, 'fail', 'Ctrl+C'); }
-  if (navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(ok, function(){ legacyCopy(text) ? ok() : no(); });
-  } else legacyCopy(text) ? ok() : no();
-}
-
-/* ── 검색 ── */
-function applySearch(){
-  var q = $('q').value.trim().toLowerCase().replace(/\s+/g, '');
-  document.querySelectorAll('.cat').forEach(function(cat){
-    var any = false;
-    cat.querySelectorAll('.crime').forEach(function(b){
-      var hit = !q || (b.textContent.toLowerCase().replace(/\s+/g, '').indexOf(q) >= 0);
-      b.classList.toggle('hide', !hit);
-      if (hit) any = true;
+function filterLaws(){
+  var query = document.getElementById('q').value.trim().toLowerCase().replace(/\s+/g, '');
+  var visible = 0;
+  document.getElementById('searchWrap').classList.toggle('has-value', !!query);
+  document.querySelectorAll('.law-group').forEach(function(group){
+    var groupVisible = 0;
+    group.querySelectorAll('.crime').forEach(function(button){
+      var match = !query || button.getAttribute('data-search').replace(/\s+/g, '').indexOf(query) !== -1;
+      button.classList.toggle('hide', !match);
+      if(match){ groupVisible++; visible++; }
     });
-    cat.classList.toggle('hide', !any);
+    group.classList.toggle('hide', groupVisible === 0);
+    group.querySelector('h3 span').textContent = query ? groupVisible + '개 일치' : group.querySelectorAll('.crime').length + '개 죄목';
   });
+  document.getElementById('cats').classList.toggle('no-results', visible === 0);
+  document.getElementById('searchCount').textContent = query ? visible + '개 일치' : '총 ' + flat.length + '개';
+  document.getElementById('noSearch').classList.toggle('on', visible === 0);
 }
 
-/* ── 시작 ── */
-buildCats();
-render();
-$('q').addEventListener('input', applySearch);
-$('people').addEventListener('input', function(){
-  var v = parseInt(this.value, 10);
-  people = (isNaN(v) || v < 0) ? 0 : Math.min(50, v);
-  if (v > 50) this.value = 50;          /* 50명이 상한 */
-  render();
+function setTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeLight').setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+  document.getElementById('themeDark').setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+  try{ localStorage.setItem('signal-fine-theme', theme); }catch(error){}
+}
+
+function initTheme(){
+  var saved = null;
+  try{ saved = localStorage.getItem('signal-fine-theme'); }catch(error){}
+  var initial = saved === 'dark' || saved === 'light'
+    ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  setTheme(initial);
+}
+
+function update(){
+  renderPicks();
+  var current = calc();
+  renderResult(current);
+  renderMix(current);
+  renderSay(current);
+}
+
+renderLaws();
+renderPeopleButtons();
+initTheme();
+filterLaws();
+update();
+
+document.getElementById('q').addEventListener('input', filterLaws);
+document.getElementById('clearSearch').addEventListener('click', function(){
+  document.getElementById('q').value = '';
+  filterLaws();
+  document.getElementById('q').focus();
 });
-$('people').addEventListener('blur', function(){
-  if (this.value === '' || parseInt(this.value, 10) < 0) this.value = 0;
+document.getElementById('people').addEventListener('input', function(event){
+  var value = Math.floor(Number(event.target.value));
+  people = isFinite(value) ? Math.max(0, Math.min(50, value)) : 0;
+  event.target.value = people;
+  update();
 });
-$('reset').addEventListener('click', function(){ picked = []; people = 0; $('people').value = 0; render(); });
+document.getElementById('reset').addEventListener('click', function(){
+  picked = [];
+  people = 0;
+  document.getElementById('people').value = 0;
+  update();
+});
+document.getElementById('themeLight').addEventListener('click', function(){ setTheme('light'); });
+document.getElementById('themeDark').addEventListener('click', function(){ setTheme('dark'); });
 </script>
 </body>
 </html>
